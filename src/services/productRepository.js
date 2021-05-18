@@ -1,20 +1,11 @@
 import * as config from '../appSettings.json';
 import { StripeApi } from '../Config';
+import '../helpers/objectExtensions';
 
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': 'Bearer ' + config.Stripe.ApiKey
 };
-
-function encodeURIObject(obj) {
-  var formBody = [];
-  for (var property in obj) {
-    var encodedKey = encodeURIComponent(property);
-    var encodedValue = encodeURIComponent(obj[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }  
-  return formBody.join("&");
-}
 
 export default class ProductRepository {
   static products = [];
@@ -31,9 +22,9 @@ export default class ProductRepository {
     fetch(StripeApi.products, {
       method: 'POST',
       headers: headers,
-      body: encodeURIObject({
+      body: {
         name: item.name,
         description: item.description
-      })
+      }.encodeURI()
     });
 }
