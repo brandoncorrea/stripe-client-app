@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,9 +9,15 @@ import { Routes } from './Config';
 import ItemManagement from "./views/itemManagement/itemManagement";
 import CreateItem from './views/createItem/createItem';
 import Home from './views/home/home';
+import { createBrowserHistory } from "history";
 
-export default function AppRouter() {
-  return (
+export default class AppRouter extends Component {
+  static history = createBrowserHistory();
+
+  static navigate = (path) =>
+    this.history.push(path);
+
+  render = () =>
     <Router>
       <div>
         <ul>
@@ -40,6 +46,5 @@ export default function AppRouter() {
           </Route>
         </Switch>
       </div>
-    </Router>
-  );
+    </Router>;
 }
