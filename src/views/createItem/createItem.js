@@ -1,6 +1,5 @@
 import './createItem.css';
-import ProductRepository from '../../services/product.service';
-var repo = new ProductRepository();
+
 function CreateItem() {
   return (
     <div className="CreateItem">

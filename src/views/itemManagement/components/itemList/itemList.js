@@ -1,20 +1,23 @@
-import './itemList.css';
+import React, { Component } from 'react';
 import ItemTile from '../../../../components/itemTile/itemTile';
-import ProductRepository from '../../../../services/product.service';
+import ProductRepository from '../../../../services/productRepository';
 
-const repo = new ProductRepository();
+class ItemList extends Component {
+  state = {
+    products: []
+  };
 
-function ItemList() {
-  
-  return (
-    <div className="ItemList">
-      {
-        repo.products.map(i => <ItemTile 
-          name={i.name} 
-          description={i.description} />)
-      }
-    </div>
-  );
+  componentDidMount = () =>
+    ProductRepository
+      .getProducts()
+      .then(i => this.setState({ products: i }));
+
+  render = () =>
+    this.state.products.map(i =>
+        <ItemTile 
+          key={i.id}
+          name={i.name}
+          description={i.description} />);
 }
 
 export default ItemList;
