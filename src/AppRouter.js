@@ -5,10 +5,10 @@ import {
   Route,
   Link
 } from "react-router-dom";
-
+import { Routes } from './Config';
 import ItemManagement from "./views/itemManagement/itemManagement";
 import CreateItem from './views/createItem/createItem';
-import App from './App';
+import Home from './views/home/home';
 
 export default function AppRouter() {
   return (
@@ -16,26 +16,26 @@ export default function AppRouter() {
       <div>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to={Routes.home}>Home</Link>
           </li>
           <li>
-            <Link to="/itemManagement">Item Management</Link>
+            <Link to={Routes.itemManagement}>Item Management</Link>
           </li>
           <li>
-            <Link to="/createItem">Create Item</Link>
+            <Link to={Routes.createItem}>Create Item</Link>
           </li>
         </ul>
 
         <hr />
 
         <Switch>
-          <Route exact path="/">
-            <App />
+          <Route exact path={Routes.home}>
+            <Home />
           </Route>
-          <Route path="/itemManagement">
+          <Route path={Routes.itemManagement}>
             <ItemManagement />
           </Route>
-          <Route path="/createItem">
+          <Route path={Routes.createItem}>
             <CreateItem />
           </Route>
         </Switch>
