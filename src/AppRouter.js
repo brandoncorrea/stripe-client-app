@@ -15,7 +15,7 @@ export default class AppRouter extends Component {
   static history = createBrowserHistory();
 
   static navigate = (path) =>
-    this.history.push(path);
+    window.location.href = path;
 
   render = () =>
     <Router>
