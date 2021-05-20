@@ -9,6 +9,7 @@ import { Routes } from './Config';
 import ItemManagement from "./views/itemManagement/itemManagement";
 import CreateItem from './views/createItem/createItem';
 import Home from './views/home/home';
+import EditItem from './views/editItem/editItem';
 import { createBrowserHistory } from "history";
 
 export default class AppRouter extends Component {
@@ -30,6 +31,9 @@ export default class AppRouter extends Component {
           <li>
             <Link to={Routes.createItem}>Create Item</Link>
           </li>
+          <li>
+            <Link to={Routes.editItem}>Edit Item</Link>
+          </li>
         </ul>
 
         <hr />
@@ -43,6 +47,9 @@ export default class AppRouter extends Component {
           </Route>
           <Route path={Routes.createItem}>
             <CreateItem />
+          </Route>
+          <Route path={Routes.editItem}>
+            <EditItem />
           </Route>
         </Switch>
       </div>

@@ -3,15 +3,18 @@ import AppRouter from '../../AppRouter';
 import ProductRepository from '../../services/productRepository';
 import './createItem.css';
 import { Routes } from '../../Config';
+import CreateProductRequest from '../../models/createProductRequest';
 
 export default class CreateItem extends Component {
 
   createItemClicked() {
-    ProductRepository.createItem({
-      name: document.getElementById('nameInput').value,
-      description: document.getElementById('descriptionInput').value
-    })
-    .then(i => AppRouter.navigate(Routes.itemManagement));
+    var request = new CreateProductRequest();
+    request.name = document.getElementById('nameInput').value;
+    request.description = document.getElementById('descriptionInput').value;
+    
+    ProductRepository
+      .create(request)
+      .then(i => AppRouter.navigate(Routes.itemManagement));
   }
 
   render = () =>
