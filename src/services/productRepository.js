@@ -10,7 +10,7 @@ const headers = {
 export default class ProductRepository {
   static products = [];
 
-  static getProducts = () =>
+  static getAll = () =>
     fetch(StripeApi.products, {
       method: 'GET',
       headers: headers
@@ -18,13 +18,33 @@ export default class ProductRepository {
     .then(res => res.json())
     .then(json => this.products = json.data);
 
-  static createItem = (item) =>
+  static get = (productId) =>
+    fetch(StripeApi.products + '/' + productId,
+      {
+        method: 'GET',
+        headers: headers
+      })
+      .then(res => res.json());
+
+  static create = (product) =>
     fetch(StripeApi.products, {
       method: 'POST',
       headers: headers,
-      body: {
-        name: item.name,
-        description: item.description
-      }.encodeURI()
+      body: product.encodeURI()
     });
+
+  static update = (product) =>
+    fetch(StripeApi.products + '/' + product.id, {
+      method: 'POST',
+      headers: headers,
+      body: product.encodeURI()
+    });
+  
+  static delete = (productId) =>
+    fetch(StripeApi.products + '/' + productId, {
+      method: 'DELETE',
+      headers: headers
+    })
+    .then(res => res.json())
+    .then(json => json.deleted);
 }
