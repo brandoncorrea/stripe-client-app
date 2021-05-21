@@ -1,25 +1,34 @@
-import { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 import * as appSettings from '../../appSettings.json';
 import React from 'react';
 import GoogleLogin from 'react-google-login';
+import { Routes } from '../../Config'
+import AppRouter from '../../AppRouter';
 
-
-const responseGoogle = (response) => {
-  console.log(response);
-  console.log(response.error);
-  console.log(response.details);
+function onSuccess(res) {
+  console.log('onSuccess');
+  console.log(res);
+  if (res.details)
+    console.log(res.details);
 }
 
-export default class Login extends Component {
-  render = () =>
-    <Container>
+function onFailure(res) {
+  console.log('onFailure');
+  console.log(res);
+  if (res.details)
+    console.log(res.details);
+} 
+
+export default function Login() {
+
+  return <Container>
       <GoogleLogin
         clientId={appSettings.Google.ClientID}
         buttonText="Login"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
+        onSuccess={onSuccess}
+        onFailure={onFailure}
         cookiePolicy={'single_host_origin'}
+        isSignedIn={true}
       />
     </Container>
 }
