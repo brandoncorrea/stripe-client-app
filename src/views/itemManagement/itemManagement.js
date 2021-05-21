@@ -23,7 +23,7 @@ export default class ItemManagement extends Component {
             <Button 
               positive
               onClick={() => AppRouter.navigate(Routes.createItem)}
-              content='Create Item' />
+              content='Create' />
           </Button.Group>
         </Form.Field>
       </Form>
