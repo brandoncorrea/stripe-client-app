@@ -19,11 +19,10 @@ export default class ItemManagement extends Component {
               negative
               onClick={() => AppRouter.navigate(Routes.home)} 
               content='Exit' />
-            <Button.Or />
             <Button 
               positive
               onClick={() => AppRouter.navigate(Routes.createItem)}
-              content='Create' />
+              content='Create Item' />
           </Button.Group>
         </Form.Field>
       </Form>
