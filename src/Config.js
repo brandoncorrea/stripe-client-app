@@ -3,6 +3,7 @@ export const Routes = {
   itemManagement: '/itemManagement',
   createItem: '/createItem',
   editItem: '/editItem',
+  login: '/login'
 }
 
 export const StripeApi = {

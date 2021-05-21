@@ -9,6 +9,7 @@ import ItemManagement from "./views/itemManagement/itemManagement";
 import CreateItem from './views/createItem/createItem';
 import Home from './views/home/home';
 import EditItem from './views/editItem/editItem';
+import Login from "./views/login/login";
 
 export default class AppRouter extends Component {
   static navigate = (path) =>
@@ -19,6 +20,9 @@ export default class AppRouter extends Component {
       <Switch>
         <Route exact path={Routes.home}>
           <Home />
+        </Route>
+        <Route path={Routes.login}>
+          <Login />
         </Route>
         <Route path={Routes.itemManagement}>
           <ItemManagement />
