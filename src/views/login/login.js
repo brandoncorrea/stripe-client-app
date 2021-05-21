@@ -10,6 +10,7 @@ function onSuccess(res) {
   console.log(res);
   if (res.details)
     console.log(res.details);
+  AppRouter.navigate(Routes.home);
 }
 
 function onFailure(res) {
