@@ -9,7 +9,4 @@ export default class UpdateProductRequest {
   statement_descriptor;
   unit_label;
   url;
-
-  constructor() {
-  }
 }

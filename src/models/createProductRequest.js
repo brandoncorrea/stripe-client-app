@@ -10,7 +10,4 @@ export default class CreateProductRequest {
   statement_descriptor;
   unit_label;
   url;
-
-  constructor() {
-  }
 }

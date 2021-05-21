@@ -16,7 +16,4 @@ export default class Product {
   unit_label;
   updated;
   url;
-  
-  constructor() {
-  }
 }

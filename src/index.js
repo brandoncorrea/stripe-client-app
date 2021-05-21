@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <div class='app-wrapper'>
+    <div className='app-wrapper'>
       <AppRouter />
     </div>
   </React.StrictMode>,
