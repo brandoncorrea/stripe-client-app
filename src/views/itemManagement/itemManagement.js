@@ -1,39 +1,31 @@
-import './itemManagement.css'
-import { Link } from 'react-router-dom';
-import React from 'react';
-import ProductRepository from '../../services/productRepository';
-import ItemTile from '../../components/itemTile/itemTile';
+import { Component } from 'react';
+import { Button, Form, Container, Header } from 'semantic-ui-react';
+import ProductList from './productList/productList';
+import AppRouter from '../../AppRouter';
 import { Routes } from '../../Config';
 
-export default class ItemManagement extends React.Component {  
-
-  state = {
-    products: []
-  };
-
-  componentDidMount = () =>
-    ProductRepository
-      .getAll()
-      .then(i => this.setState({ products: i }));
+export default class ItemManagement extends Component {  
 
   render = () =>
-    <div className="ItemManagement">
-      <header className="ItemManagement-header">
-        {
-          // Are there any items?
-          this.state.products && this.state.products.length > 0
-            
-            ? this.state.products.map(i =>
-              <Link to={Routes.editItem + '?id=' + i.id}>
-                <ItemTile
-                  key={i.id}
-                  name={i.name}
-                  description={i.description} />
-              </Link>)
-            
-            : <p>No items to display.</p>
-        }
-        <Link to={Routes.createItem} className="btn">New Item</Link>
-      </header>
-    </div>;
+    <Container>
+      <Header as='h1' textAlign='center'>Item Management</Header>
+      <Form>
+        <Form.Field>
+          <ProductList />
+        </Form.Field>
+        <Form.Field>
+          <Button.Group fluid>
+            <Button 
+              negative
+              onClick={() => AppRouter.navigate(Routes.home)} 
+              content='Exit' />
+            <Button.Or />
+            <Button 
+              positive
+              onClick={() => AppRouter.navigate(Routes.createItem)}
+              content='Create Item' />
+          </Button.Group>
+        </Form.Field>
+      </Form>
+    </Container>
 }

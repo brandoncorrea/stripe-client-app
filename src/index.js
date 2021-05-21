@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'semantic-ui-css/semantic.min.css'
 import AppRouter from './AppRouter';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppRouter />
+    <div class='app-wrapper'>
+      <AppRouter />
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );

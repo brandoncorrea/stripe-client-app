@@ -12,14 +12,6 @@ code {
     monospace;
 }
 
-.btn {
-  padding: 5px;
-  border: solid #000 1px;
-  border-radius: 10px;
-  background-color: rgb(0, 255, 213);
-  text-decoration: none;
-}
-
-.btn:hover {
-  cursor: pointer;
+.app-wrapper {
+  padding: 25px 0;
 }

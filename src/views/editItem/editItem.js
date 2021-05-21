@@ -1,16 +1,15 @@
 import { Component } from 'react';
 import ProductRepository from '../../services/productRepository';
-import './editItem.css';
 import UpdateProductRequest from '../../models/updateProductRequest';
 import Product from '../../models/product';
 import AppRouter from '../../AppRouter';
 import { Routes } from '../../Config';
+import { Form, Container, Button, Header } from 'semantic-ui-react';
 
 export default class EditItem extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       product: new Product()
     };
@@ -36,12 +35,11 @@ export default class EditItem extends Component {
 
   handleUpdateClick() {
     var request = new UpdateProductRequest();
-    request.id = this.state.product.id;
     request.name = document.getElementById('nameInput').value;
     request.description = document.getElementById('descriptionInput').value;
 
     ProductRepository
-      .update(request)
+      .update(this.state.product.id, request)
       .then(() => AppRouter.navigate(Routes.itemManagement));
   }
 
@@ -66,38 +64,42 @@ export default class EditItem extends Component {
   }
 
   render = () =>
-    <div className="EditItem">
-      <div>
-        <label htmlFor="nameInput">Name: </label>
-        <input 
-          id="nameInput" 
-          type="text" 
-          onChange={this.handleNameChange}
-          value={
-            this.state.product 
-              ? this.state.product.name
-              : ''
-            } 
-        />
-      </div>
-      
-      <div>
-        <label htmlFor="descriptionInput">Description: </label>
-        <input 
-          id="descriptionInput" 
-          type="text" 
-          onChange={this.handleDescriptionChange}
-          value={
-            this.state.product 
-              ? this.state.product.description
-              : ''
-          } />
-      </div>
+    <Container>
+      <Header as='h1' textAlign='center'>Update Item</Header>
+      <Form>
+          <Form.Field>
+            <label>Name: </label>
+            <input 
+              id="nameInput" 
+              type="text" 
+              onChange={this.handleNameChange}
+              value={
+                this.state.product 
+                  ? this.state.product.name
+                  : ''
+                } 
+            />
+          </Form.Field>
+          
+          <Form.Field>
+            <label>Description: </label>
+            <input 
+              id="descriptionInput" 
+              type="text" 
+              onChange={this.handleDescriptionChange}
+              value={
+                this.state.product 
+                  ? this.state.product.description
+                  : ''
+              } />
+          </Form.Field>
 
-      <div>
-        <input type="button" value="Update" onClick={this.handleUpdateClick} />
-        <input type="button" value="Delete" onClick={this.handleDeleteClick} />
-      </div>
-    </div>;
+          <Button.Group fluid>
+            <Button negative onClick={this.handleDeleteClick}>Delete</Button>
+            <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
+            <Button positive onClick={this.handleUpdateClick}>Save</Button>
+          </Button.Group>
+      </Form>
+    </Container>;
 
 }

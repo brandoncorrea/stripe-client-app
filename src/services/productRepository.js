@@ -33,8 +33,8 @@ export default class ProductRepository {
       body: product.encodeURI()
     });
 
-  static update = (product) =>
-    fetch(StripeApi.products + '/' + product.id, {
+  static update = (productId, product) =>
+    fetch(StripeApi.products + '/' + productId, {
       method: 'POST',
       headers: headers,
       body: product.encodeURI()
