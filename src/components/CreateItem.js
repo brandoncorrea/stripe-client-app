@@ -3,7 +3,7 @@ import AppRouter from '../AppRouter';
 import ProductRepository from '../services/productRepository';
 import { Routes } from '../Config';
 import CreateProductRequest from '../models/createProductRequest';
-import { Form, Button, Container, Header } from 'semantic-ui-react';
+import { Form, Button, Container, Header, Checkbox } from 'semantic-ui-react';
 
 export default class CreateItem extends Component {
 
@@ -11,6 +11,7 @@ export default class CreateItem extends Component {
     var request = new CreateProductRequest();
     request.name = document.getElementById('nameInput').value;
     request.description = document.getElementById('descriptionInput').value;
+    request.active = document.getElementById('activeCheckbox').checked;
     
     ProductRepository
       .create(request)
@@ -35,6 +36,15 @@ export default class CreateItem extends Component {
             id="descriptionInput" 
             placeholder="Product Description"
             type="text"  />
+        </Form.Field>
+
+        <Form.Field>
+          <Checkbox 
+            toggle 
+            label="Active"
+            id="activeCheckbox"
+            defaultChecked={true}
+            />
         </Form.Field>
 
         <Button.Group fluid>

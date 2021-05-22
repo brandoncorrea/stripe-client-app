@@ -18,7 +18,13 @@ export default class ProductCard extends Component {
       this.state.product.id);
 
   render = () =>
-    <Card fluid onClick={this.navigateToEditItem}>
+    <Card fluid 
+      onClick={this.navigateToEditItem}
+      color={
+        this.state.product.active 
+          ? 'green' 
+          : 'red'
+      }>
       <Card.Content>
         <Card.Header>{this.state.product.name}</Card.Header>
         <Card.Description>{this.state.product.description}</Card.Description>

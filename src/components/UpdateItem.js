@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import ProductRepository from '../services/productRepository';
-import UpdateProductRequest from '../models/updateProductRequest';
 import AppRouter from '../AppRouter';
 import { Routes } from '../Config';
-import { Form, Container, Button, Header, Message } from 'semantic-ui-react';
+import { Form, Container, Button, Header, Message, Checkbox } from 'semantic-ui-react';
 
 export default class UpdateItem extends Component {
 
@@ -12,7 +11,8 @@ export default class UpdateItem extends Component {
     this.state = {
       product: {
         description: '',
-        name: ''
+        name: '',
+        active: false
       },
       message: ''
     };
@@ -37,9 +37,11 @@ export default class UpdateItem extends Component {
   }
 
   handleUpdateClick = () => {
-    var request = new UpdateProductRequest();
-    request.name = document.getElementById('nameInput').value;
-    request.description = document.getElementById('descriptionInput').value;
+    var request = {
+      name: this.state.product.name,
+      description: this.state.product.description,
+      active: this.state.product.active
+    }
 
     ProductRepository
       .update(this.state.product.id, request)
@@ -72,6 +74,12 @@ export default class UpdateItem extends Component {
     this.setState({ product })
   }
 
+  handleActiveToggle = event => {
+    var product = this.state.product;
+    product.active = event.target.checked;
+    this.setState({ product });
+  }
+
   render = () =>
     <Container>
       <Header as='h1' textAlign='center'>Update Item</Header>
@@ -101,6 +109,15 @@ export default class UpdateItem extends Component {
               onChange={this.handleDescriptionChange}
               value={this.state.product.description} 
               />
+          </Form.Field>
+
+          <Form.Field>
+            <Checkbox 
+              toggle 
+              label="Active"
+              id="activeCheckbox"
+              checked={this.state.product.active}
+              onChange={this.handleActiveToggle} />
           </Form.Field>
 
           <Button.Group fluid>
