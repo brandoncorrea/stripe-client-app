@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import AppRouter from '../../AppRouter';
-import ProductRepository from '../../services/productRepository';
-import { Routes } from '../../Config';
-import CreateProductRequest from '../../models/createProductRequest';
+import AppRouter from '../AppRouter';
+import ProductRepository from '../services/productRepository';
+import { Routes } from '../Config';
+import CreateProductRequest from '../models/createProductRequest';
 import { Form, Button, Container, Header } from 'semantic-ui-react';
 
 export default class CreateItem extends Component {

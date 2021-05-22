@@ -1,6 +1,6 @@
 import * as config from '../appSettings.json';
 import { StripeApi } from '../Config';
-import '../helpers/objectExtensions';
+import { encodeURI } from '../helpers/encodingHelper';
 
 const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -30,14 +30,14 @@ export default class ProductRepository {
     fetch(StripeApi.products, {
       method: 'POST',
       headers: headers,
-      body: product.encodeURI()
+      body: encodeURI(product)
     });
 
   static update = (productId, product) =>
     fetch(StripeApi.products + '/' + productId, {
       method: 'POST',
       headers: headers,
-      body: product.encodeURI()
+      body: encodeURI(product)
     });
   
   static delete = (productId) =>

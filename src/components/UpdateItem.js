@@ -1,12 +1,12 @@
 import { Component } from 'react';
-import ProductRepository from '../../services/productRepository';
-import UpdateProductRequest from '../../models/updateProductRequest';
-import Product from '../../models/product';
-import AppRouter from '../../AppRouter';
-import { Routes } from '../../Config';
+import ProductRepository from '../services/productRepository';
+import UpdateProductRequest from '../models/updateProductRequest';
+import Product from '../models/product';
+import AppRouter from '../AppRouter';
+import { Routes } from '../Config';
 import { Form, Container, Button, Header } from 'semantic-ui-react';
 
-export default class EditItem extends Component {
+export default class UpdateItem extends Component {
 
   constructor(props) {
     super(props);
@@ -101,5 +101,4 @@ export default class EditItem extends Component {
           </Button.Group>
       </Form>
     </Container>;
-
 }

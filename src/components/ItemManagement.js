@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { Button, Form, Container, Header } from 'semantic-ui-react';
-import ProductList from './productList/productList';
-import AppRouter from '../../AppRouter';
-import { Routes } from '../../Config';
+import ProductList from './ProductList';
+import AppRouter from '../AppRouter';
+import { Routes } from '../Config';
 
 export default class ItemManagement extends Component {  
 

@@ -5,34 +5,39 @@ import {
   Route,
 } from "react-router-dom";
 import { Routes } from './Config';
-import ItemManagement from "./views/itemManagement/itemManagement";
-import CreateItem from './views/createItem/createItem';
-import Home from './views/home/home';
-import EditItem from './views/editItem/editItem';
-import Login from "./views/login/login";
+import ItemManagement from "./components/ItemManagement";
+import CreateItem from './components/CreateItem';
+import Home from './components/Home';
+import UpdateItem from './components/UpdateItem';
+import Login from './components/Login';
 
 export default class AppRouter extends Component {
-  static navigate = (path) =>
+  static navigate = path =>
     window.location.href = path;
 
   render = () =>
     <Router>
       <Switch>
-        <Route exact path={Routes.home}>
-          <Home />
-        </Route>
-        <Route path={Routes.login}>
-          <Login />
-        </Route>
-        <Route path={Routes.itemManagement}>
-          <ItemManagement />
-        </Route>
-        <Route path={Routes.createItem}>
-          <CreateItem />
-        </Route>
-        <Route path={Routes.editItem}>
-          <EditItem />
-        </Route>
+        <Route exact 
+          path={Routes.home}
+          component={Home}
+          />
+        <Route 
+          path={Routes.login}
+          component={Login}
+          />
+        <Route 
+          path={Routes.itemManagement}
+          component={ItemManagement}
+          />
+        <Route 
+          path={Routes.createItem}
+          component={CreateItem}
+          />
+        <Route 
+          path={Routes.editItem}
+          component={UpdateItem}
+          />
       </Switch>
     </Router>;
 }
