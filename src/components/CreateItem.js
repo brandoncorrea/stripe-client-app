@@ -15,7 +15,7 @@ export default class CreateItem extends Component {
     
     ProductRepository
       .create(request)
-      .then(i => AppRouter.navigate(Routes.itemManagement));
+      .then(() => AppRouter.navigate(Routes.itemManagement));
   }
 
   render = () =>
