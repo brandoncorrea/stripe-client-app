@@ -45,6 +45,5 @@ export default class ProductRepository {
       method: 'DELETE',
       headers: headers
     })
-    .then(res => res.json())
-    .then(json => json.deleted);
+    .then(res => res.json());
 }

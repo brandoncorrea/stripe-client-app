@@ -1,21 +1,24 @@
 import { Component } from 'react';
 import ProductRepository from '../services/productRepository';
 import UpdateProductRequest from '../models/updateProductRequest';
-import Product from '../models/product';
 import AppRouter from '../AppRouter';
 import { Routes } from '../Config';
-import { Form, Container, Button, Header } from 'semantic-ui-react';
+import { Form, Container, Button, Header, Message } from 'semantic-ui-react';
 
 export default class UpdateItem extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      product: new Product()
+      product: {
+        description: '',
+        name: ''
+      },
+      message: ''
     };
 
     var productId = new URLSearchParams(window.location.search).get('id');
-    if (productId == null)
+    if (productId === null)
       AppRouter.navigate(Routes.itemManagement);
 
     ProductRepository
@@ -24,7 +27,7 @@ export default class UpdateItem extends Component {
         if (product.error)
           AppRouter.navigate(Routes.itemManagement);
         else
-          this.setState({ product });
+          this.setState({ product, message: '' });
       });
       
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -33,7 +36,7 @@ export default class UpdateItem extends Component {
     this.handleDeleteClick = this.handleDeleteClick.bind(this);
   }
 
-  handleUpdateClick() {
+  handleUpdateClick = () => {
     var request = new UpdateProductRequest();
     request.name = document.getElementById('nameInput').value;
     request.description = document.getElementById('descriptionInput').value;
@@ -46,18 +49,24 @@ export default class UpdateItem extends Component {
   handleDeleteClick = () =>
     ProductRepository
       .delete(this.state.product.id)
-      .then(success =>{
-        if (success)
+      .then(res => {
+        if (res.deleted)
           AppRouter.navigate(Routes.itemManagement);
-      });
+        else 
+          this.setState({
+            message:res.error.message, 
+            product: this.state.product 
+          });
+      })
+      .catch(err => console.error('err:', err));
 
-  handleNameChange(event) {
+  handleNameChange = event => {
     var product = this.state.product;
     product.name = event.target.value;
     this.setState({ product });
   }
 
-  handleDescriptionChange(event) {
+  handleDescriptionChange = event => {
     var product = this.state.product;
     product.description = event.target.value;
     this.setState({ product })
@@ -66,6 +75,13 @@ export default class UpdateItem extends Component {
   render = () =>
     <Container>
       <Header as='h1' textAlign='center'>Update Item</Header>
+      {
+        this.state.message.length > 0 &&
+        <Message negative>
+          <Message.Header>Sorry, we can't delete that item</Message.Header>
+          <p>{this.state.message}</p>
+        </Message>
+      }
       <Form>
           <Form.Field>
             <label>Name: </label>
@@ -73,12 +89,8 @@ export default class UpdateItem extends Component {
               id="nameInput" 
               type="text" 
               onChange={this.handleNameChange}
-              value={
-                this.state.product 
-                  ? this.state.product.name
-                  : ''
-                } 
-            />
+              value={this.state.product.name} 
+              />
           </Form.Field>
           
           <Form.Field>
@@ -87,11 +99,8 @@ export default class UpdateItem extends Component {
               id="descriptionInput" 
               type="text" 
               onChange={this.handleDescriptionChange}
-              value={
-                this.state.product 
-                  ? this.state.product.description
-                  : ''
-              } />
+              value={this.state.product.description} 
+              />
           </Form.Field>
 
           <Button.Group fluid>
