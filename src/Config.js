@@ -1,3 +1,5 @@
+import * as appSettings from './appSettings.json';
+
 export const Routes = {
   home: '/',
   itemManagement: '/itemManagement',
@@ -7,5 +9,10 @@ export const Routes = {
 }
 
 export const StripeApi = {
-  products: 'https://api.stripe.com/v1/products'
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Authorization': 'Bearer ' + appSettings.Stripe.ApiKey
+  },
+  products: 'https://api.stripe.com/v1/products',
+  prices: 'https://api.stripe.com/v1/prices'
 }
