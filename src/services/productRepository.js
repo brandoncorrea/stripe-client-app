@@ -8,15 +8,13 @@ const headers = {
 };
 
 export default class ProductRepository {
-  static products = [];
-
   static getAll = () =>
     fetch(StripeApi.products, {
       method: 'GET',
       headers: headers
     })
     .then(res => res.json())
-    .then(json => this.products = json.data);
+    .then(json => json.data);
 
   static get = (productId) =>
     fetch(StripeApi.products + '/' + productId,
