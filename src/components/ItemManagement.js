@@ -10,9 +10,7 @@ export default class ItemManagement extends Component {
     <Container>
       <Header as='h1' textAlign='center'>Item Management</Header>
       <Form>
-        <Form.Field>
-          <ProductList />
-        </Form.Field>
+        <ProductList />
         <Form.Field>
           <Button.Group fluid>
             <Button 

@@ -7,10 +7,16 @@ export default class ProductRepository {
       method: 'GET',
       headers: StripeApi.headers
     })
-    .then(res => res.json())
-    .then(json => json.data);
+    .then(res => res.json());
 
-  static get = (productId) =>
+  static getAfter = productId => 
+    fetch(`${StripeApi.products}?starting_after=${productId}`, {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+
+  static get = productId =>
     fetch(StripeApi.products + '/' + productId,
       {
         method: 'GET',
@@ -18,7 +24,7 @@ export default class ProductRepository {
       })
       .then(res => res.json());
 
-  static create = (product) =>
+  static create = product =>
     fetch(StripeApi.products, {
       method: 'POST',
       headers: StripeApi.headers,
@@ -32,7 +38,7 @@ export default class ProductRepository {
       body: encodeURI(product)
     });
   
-  static delete = (productId) =>
+  static delete = productId =>
     fetch(StripeApi.products + '/' + productId, {
       method: 'DELETE',
       headers: StripeApi.headers
