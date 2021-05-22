@@ -1,20 +1,33 @@
 import * as Cookies from "js-cookie";
 import React from 'react';
+import jwt_decode from 'jwt-decode';
 
-export const setSessionCookie = session => {
-  Cookies.remove("session");
-  Cookies.set("session", session, { expires: 14 });
+const tokenName = 'google-token';
+
+export const setSessionCookie = token => {
+  Cookies.remove(tokenName);
+  Cookies.set(tokenName, token, { expires: 14 });
 };
 
-export const removeSessionCookie = () => Cookies.remove("session");
+export const removeSessionCookie = () => Cookies.remove(tokenName);
 
-export const getSessionCookie = () => Cookies.get("session");
+export function getSessionCookie() {
+  var token = Cookies.get(tokenName);
+  if (token === null || token === undefined)
+    return token;
 
+  if (jwt_decode(token).exp * 1000 > Date.now())
+    return token;
+
+  removeSessionCookie();
+  return null;
+}
 export function getUser() {
   var token = getSessionCookie();
   if (token === null || token === undefined)
-    return token;
-  return JSON.parse(token);
+    return null;
 
+  return jwt_decode(token);
 }
+
 export const SessionContext = React.createContext(getSessionCookie());

@@ -26,7 +26,7 @@ export default class LoginButton extends Component {
   }
 
   onSuccess = res => {
-    setSessionCookie(res.profileObj);
+    setSessionCookie(res.tokenId);
     refreshTokenSetup(res);
     if (this.state.onSuccess)
       this.state.onSuccess(res);
