@@ -1,7 +1,7 @@
 import { Component } from "react";
-import { navigate } from "../../../AppRouter";
-import { Routes } from "../../../Config";
+import { Routes } from "../Config";
 import { Card } from 'semantic-ui-react';
+import AppRouter from "../AppRouter";
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class ProductCard extends Component {
   }
 
   navigateToEditItem = () =>
-    navigate(
+    AppRouter.navigate(
       Routes.editItem + 
       '?id=' + 
       this.state.product.id);

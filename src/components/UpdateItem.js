@@ -1,12 +1,12 @@
 import { Component } from 'react';
-import ProductRepository from '../../services/productRepository';
-import UpdateProductRequest from '../../models/updateProductRequest';
-import Product from '../../models/product';
-import { navigate } from '../../AppRouter';
-import { Routes } from '../../Config';
+import ProductRepository from '../services/productRepository';
+import UpdateProductRequest from '../models/updateProductRequest';
+import Product from '../models/product';
+import AppRouter from '../AppRouter';
+import { Routes } from '../Config';
 import { Form, Container, Button, Header } from 'semantic-ui-react';
 
-export default class EditItem extends Component {
+export default class UpdateItem extends Component {
 
   constructor(props) {
     super(props);
@@ -16,13 +16,13 @@ export default class EditItem extends Component {
 
     var productId = new URLSearchParams(window.location.search).get('id');
     if (productId == null)
-      navigate(Routes.itemManagement);
+      AppRouter.navigate(Routes.itemManagement);
 
     ProductRepository
       .get(productId)
       .then(product => {
         if (product.error)
-          navigate(Routes.itemManagement);
+          AppRouter.navigate(Routes.itemManagement);
         else
           this.setState({ product });
       });
@@ -40,7 +40,7 @@ export default class EditItem extends Component {
 
     ProductRepository
       .update(this.state.product.id, request)
-      .then(() => navigate(Routes.itemManagement));
+      .then(() => AppRouter.navigate(Routes.itemManagement));
   }
 
   handleDeleteClick = () =>
@@ -48,7 +48,7 @@ export default class EditItem extends Component {
       .delete(this.state.product.id)
       .then(success =>{
         if (success)
-          navigate(Routes.itemManagement);
+          AppRouter.navigate(Routes.itemManagement);
       });
 
   handleNameChange(event) {
@@ -96,10 +96,9 @@ export default class EditItem extends Component {
 
           <Button.Group fluid>
             <Button negative onClick={this.handleDeleteClick}>Delete</Button>
-            <Button onClick={() => navigate(Routes.itemManagement)}>Cancel</Button>
+            <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
             <Button positive onClick={this.handleUpdateClick}>Save</Button>
           </Button.Group>
       </Form>
     </Container>;
-
 }

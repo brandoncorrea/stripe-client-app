@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { Button, Form, Container, Header } from 'semantic-ui-react';
-import ProductList from './productList/productList';
-import { navigate } from '../../AppRouter';
-import { Routes } from '../../Config';
+import ProductList from './ProductList';
+import AppRouter from '../AppRouter';
+import { Routes } from '../Config';
 
 export default class ItemManagement extends Component {  
 
@@ -17,11 +17,11 @@ export default class ItemManagement extends Component {
           <Button.Group fluid>
             <Button 
               negative
-              onClick={() => navigate(Routes.home)} 
+              onClick={() => AppRouter.navigate(Routes.home)} 
               content='Exit' />
             <Button 
               positive
-              onClick={() => navigate(Routes.createItem)}
+              onClick={() => AppRouter.navigate(Routes.createItem)}
               content='Create Item' />
           </Button.Group>
         </Form.Field>

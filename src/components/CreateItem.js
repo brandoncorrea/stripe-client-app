@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import { navigate } from '../../AppRouter';
-import ProductRepository from '../../services/productRepository';
-import { Routes } from '../../Config';
-import CreateProductRequest from '../../models/createProductRequest';
+import AppRouter from '../AppRouter';
+import ProductRepository from '../services/productRepository';
+import { Routes } from '../Config';
+import CreateProductRequest from '../models/createProductRequest';
 import { Form, Button, Container, Header } from 'semantic-ui-react';
 
 export default class CreateItem extends Component {
@@ -14,7 +14,7 @@ export default class CreateItem extends Component {
     
     ProductRepository
       .create(request)
-      .then(i => navigate(Routes.itemManagement));
+      .then(i => AppRouter.navigate(Routes.itemManagement));
   }
 
   render = () =>
@@ -38,7 +38,7 @@ export default class CreateItem extends Component {
         </Form.Field>
 
         <Button.Group fluid>
-          <Button onClick={() => navigate(Routes.itemManagement)}>Cancel</Button>
+          <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
           <Button positive onClick={this.createProductClicked}>Save</Button>
         </Button.Group>
     </Form>
