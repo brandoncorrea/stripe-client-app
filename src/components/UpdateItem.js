@@ -10,6 +10,7 @@ export default class UpdateItem extends Component {
     super(props);
     this.state = {
       product: {
+        id: '',
         description: '',
         name: '',
         active: false
@@ -17,12 +18,12 @@ export default class UpdateItem extends Component {
       message: ''
     };
 
-    var productId = new URLSearchParams(window.location.search).get('id');
-    if (productId === null)
+    this.state.product.id = AppRouter.getSearchParam('productId');
+    if (this.state.product.id === null)
       AppRouter.navigate(Routes.itemManagement);
 
     ProductRepository
-      .get(productId)
+      .get(this.state.product.id)
       .then(product => {
         if (product.error)
           AppRouter.navigate(Routes.itemManagement);
@@ -80,6 +81,9 @@ export default class UpdateItem extends Component {
     this.setState({ product });
   }
 
+  navigateToPriceManagement = () =>
+    AppRouter.navigate(`${Routes.priceManagement}?productId=${this.state.product.id}`);
+
   render = () =>
     <Container>
       <Header as='h1' textAlign='center'>Update Item</Header>
@@ -120,10 +124,22 @@ export default class UpdateItem extends Component {
               onChange={this.handleActiveToggle} />
           </Form.Field>
 
+          <Form.Field>
+            <Button fluid
+              onClick={this.navigateToPriceManagement} 
+              content="Manage Prices" />
+          </Form.Field>
+
           <Button.Group fluid>
-            <Button negative onClick={this.handleDeleteClick}>Delete</Button>
-            <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
-            <Button positive onClick={this.handleUpdateClick}>Save</Button>
+            <Button negative 
+              onClick={this.handleDeleteClick}
+              content="Delete" />
+            <Button 
+              onClick={() => AppRouter.navigate(Routes.itemManagement)} 
+              content="Cancel" />
+            <Button positive 
+              onClick={this.handleUpdateClick} 
+              content="Save" />
           </Button.Group>
       </Form>
     </Container>;

@@ -10,10 +10,14 @@ import CreateItem from './components/CreateItem';
 import Home from './components/Home';
 import UpdateItem from './components/UpdateItem';
 import Login from './components/Login';
+import PriceManagement from './components/PriceManagement';
 
 export default class AppRouter extends Component {
   static navigate = path =>
     window.location.href = path;
+
+  static getSearchParam = name =>
+    new URLSearchParams(window.location.search).get(name);
 
   render = () =>
     <Router>
@@ -21,6 +25,10 @@ export default class AppRouter extends Component {
         <Route exact 
           path={Routes.home}
           component={Home}
+          />
+        <Route
+          path={Routes.priceManagement}
+          component={PriceManagement}
           />
         <Route 
           path={Routes.login}

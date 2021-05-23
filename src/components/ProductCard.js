@@ -14,7 +14,7 @@ export default class ProductCard extends Component {
   navigateToEditItem = () =>
     AppRouter.navigate(
       Routes.editItem + 
-      '?id=' + 
+      '?productId=' + 
       this.state.product.id);
 
   render = () =>
