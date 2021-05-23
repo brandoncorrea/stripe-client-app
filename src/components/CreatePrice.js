@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Container, Header, Form, Button, Checkbox, Select } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
+import ProductRepository from "../services/productRepository";
 
 export default class CreatePrice extends Component {
 
@@ -18,12 +19,19 @@ export default class CreatePrice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      productId: ''
+      product: {
+        id: '',
+        name: ''        
+      }
     };
 
-    this.state.productId = AppRouter.getSearchParam('productId');
-    if (this.state.productId === null)
+    this.state.product.id = AppRouter.getSearchParam('productId');
+    if (this.state.product.id === null)
       AppRouter.navigate(Routes.itemManagement);
+
+    ProductRepository
+      .get(this.state.product.id)
+      .then(product => this.setState({ product }));
   }
 
   navigateToPriceManagement = () =>
@@ -39,6 +47,12 @@ export default class CreatePrice extends Component {
         as='h1' 
         content='Create Price' 
         textAlign='center' />
+      
+      <Header 
+        as='h3'
+        content={this.state.product.name}
+        textAlign='center'/>
+
       <Form>
         <Form.Field>
           <label>Dollar Amount</label>
