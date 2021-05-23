@@ -8,10 +8,7 @@ import { Routes } from './Config';
 import ItemManagement from "./components/ItemManagement";
 import CreateItem from './components/CreateItem';
 import Home from './components/Home';
-import UpdateItem from './components/UpdateItem';
 import Login from './components/Login';
-import PriceManagement from './components/PriceManagement';
-import CreatePrice from "./components/CreatePrice";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -27,14 +24,6 @@ export default class AppRouter extends Component {
           path={Routes.home}
           component={Home}
           />
-        <Route
-          path={Routes.priceManagement}
-          component={PriceManagement}
-          />
-        <Route 
-          path={Routes.createPrice}
-          component={CreatePrice}
-          />
         <Route 
           path={Routes.login}
           component={Login}
@@ -46,10 +35,6 @@ export default class AppRouter extends Component {
         <Route 
           path={Routes.createItem}
           component={CreateItem}
-          />
-        <Route 
-          path={Routes.editItem}
-          component={UpdateItem}
           />
       </Switch>
     </Router>;

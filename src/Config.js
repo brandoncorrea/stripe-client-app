@@ -3,10 +3,7 @@ import * as appSettings from './appSettings.json';
 export const Routes = {
   home: '/',
   itemManagement: '/itemManagement',
-  priceManagement: '/priceManagement',
   createItem: '/createItem',
-  createPrice: '/createPrice',
-  editItem: '/editItem',
   login: '/login'
 }
 

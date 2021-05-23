@@ -16,32 +16,25 @@ export default class ProductRepository {
     })
     .then(res => res.json());
 
-  static get = productId =>
-    fetch(StripeApi.products + '/' + productId,
-      {
-        method: 'GET',
-        headers: StripeApi.headers
-      })
-      .then(res => res.json());
-
   static create = product =>
     fetch(StripeApi.products, {
       method: 'POST',
       headers: StripeApi.headers,
       body: encodeURI(product)
-    });
+    })
+    .then(res => res.json());
 
   static update = (productId, product) =>
     fetch(StripeApi.products + '/' + productId, {
       method: 'POST',
       headers: StripeApi.headers,
       body: encodeURI(product)
-    });
-  
-  static delete = productId =>
-    fetch(StripeApi.products + '/' + productId, {
-      method: 'DELETE',
-      headers: StripeApi.headers
     })
     .then(res => res.json());
+
+    static activate = productId =>
+      ProductRepository.update(productId, { active: true });
+      
+    static deactivate = productId =>
+      ProductRepository.update(productId, { active: false });
 }

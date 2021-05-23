@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Card, Button, Form, Message } from 'semantic-ui-react';
+import { Card, Button, Message } from 'semantic-ui-react';
 import ProductRepository from "../services/productRepository";
 import ProductCard from "./ProductCard";
 
@@ -19,20 +19,16 @@ export default class ProductList extends Component {
       }));
 
   ItemField = () =>
-    <Form.Field>
+    this.state.products && 
+    this.state.products.length > 0 &&
+    <Card.Group>
       {
-        this.state.products && 
-        this.state.products.length > 0 &&
-        <Card.Group>
-          {
-            this.state.products.map(i =>
-              <ProductCard 
-              key={i.id}
-              product={i} />)
-            }
-        </Card.Group>
-      }
-    </Form.Field>;
+        this.state.products.map(i =>
+          <ProductCard 
+          key={i.id}
+          product={i} />)
+        }
+    </Card.Group>
 
   onHasMoreClicked = event => {
     event.preventDefault();
@@ -52,12 +48,10 @@ export default class ProductList extends Component {
   ButtonField = () =>
       this.state.has_more
       ?
-        <Form.Field>
-          <Button 
-            fluid
-            onClick={this.onHasMoreClicked}
-            content='More...' />
-        </Form.Field>
+        <Button 
+          fluid
+          onClick={this.onHasMoreClicked}
+          content='More...' />
       :
         <Message>
           No more items to display!
