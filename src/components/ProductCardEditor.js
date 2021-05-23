@@ -108,7 +108,7 @@ export default class ProductCardEditor extends Component {
 
   render = () =>
     <Card.Content>
-      <ErrorMessage />
+      <ErrorMessage message={this.state.message} />
       <Form>
         <Form.Field>
           <label>Name:</label>
