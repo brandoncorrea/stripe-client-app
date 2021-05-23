@@ -11,6 +11,7 @@ import Home from './components/Home';
 import UpdateItem from './components/UpdateItem';
 import Login from './components/Login';
 import PriceManagement from './components/PriceManagement';
+import CreatePrice from "./components/CreatePrice";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -29,6 +30,10 @@ export default class AppRouter extends Component {
         <Route
           path={Routes.priceManagement}
           component={PriceManagement}
+          />
+        <Route 
+          path={Routes.createPrice}
+          component={CreatePrice}
           />
         <Route 
           path={Routes.login}

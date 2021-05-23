@@ -18,7 +18,7 @@ export default class PriceManagement extends Component {
     AppRouter.navigate(`${Routes.editItem}?productId=${this.state.productId}`);
 
   navigateToCreatePrice = () =>
-    {}//AppRouter.navigate(`${Routes.createPrice}?productId=${this.state.productId}`);
+    AppRouter.navigate(`${Routes.createPrice}?productId=${this.state.productId}`);
 
   render = () =>
     <Container>

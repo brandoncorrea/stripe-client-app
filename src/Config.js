@@ -5,6 +5,7 @@ export const Routes = {
   itemManagement: '/itemManagement',
   priceManagement: '/priceManagement',
   createItem: '/createItem',
+  createPrice: '/createPrice',
   editItem: '/editItem',
   login: '/login'
 }
