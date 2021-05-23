@@ -1,19 +1,15 @@
 import { Component } from "react";
-import { Container, Header, Form, Button, Checkbox, Select } from "semantic-ui-react";
+import { Container, Header, Form, Button, Checkbox, Select, Message } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
+import PriceRepository from "../services/priceRepository";
 import ProductRepository from "../services/productRepository";
 
 export default class CreatePrice extends Component {
 
   billingSchemes = [
     { key: 'per_unit', text: 'Per Unit', value: 'per_unit' },
-    { key: 'tiered', text: 'Tiered', value: 'tiered' },
-  ];
-
-  priceTypes = [
-    { key: 'one_time', text: 'One Time', value: 'one_time' },
-    { key: 'recurring', text: 'Recurring', value: 'recurring' },
+    //{ key: 'tiered', text: 'Tiered', value: 'tiered' },
   ];
 
   constructor(props) {
@@ -22,7 +18,9 @@ export default class CreatePrice extends Component {
       product: {
         id: '',
         name: ''        
-      }
+      },
+      billingScheme: this.billingSchemes[0].value,
+      message: ''
     };
 
     this.state.product.id = AppRouter.getSearchParam('productId');
@@ -35,11 +33,50 @@ export default class CreatePrice extends Component {
   }
 
   navigateToPriceManagement = () =>
-    AppRouter.navigate(`${Routes.priceManagement}?productId=${this.state.productId}`);
+    AppRouter.navigate(`${Routes.priceManagement}?productId=${this.state.product.id}`);
+
+  getPriceAmount() {
+    var input = document.getElementById('amountInput').value.trim();
+    if (input.length === 0)
+      return undefined;
+    if (input[0] === '$')
+      input = input.substring(1);
+    return parseFloat(input);
+  }
+
+  hasLessThanTwoDecimals = value => {
+    value = value.toString().split('.');
+    return value.length < 2 ||
+      (value.length === 2 && value[1].length <= 2);
+  }
+
+  priceIsValid = () => {
+    var price = this.getPriceAmount();
+    return !isNaN(price) 
+      && this.hasLessThanTwoDecimals(price);
+  };
 
   createPriceClicked = () => {
+    if (!this.priceIsValid()) {
+      this.setState({message: 'Please enter a valid price.'});
+      return;
+    }
 
+    var request = {
+      product: this.state.product.id,
+      currency: 'usd',
+      unit_amount: this.getPriceAmount() * 100,
+      billing_scheme: this.state.billingScheme,
+      active: document.getElementById('activeCheckbox').checked
+    };
+
+    PriceRepository
+      .create(request)
+      .then(() => this.navigateToPriceManagement());
   }
+  
+  setBillingScheme = (e, { value }) =>
+    this.setState({billingScheme: value});
 
   render = () =>
     <Container>
@@ -53,6 +90,13 @@ export default class CreatePrice extends Component {
         content={this.state.product.name}
         textAlign='center'/>
 
+      {
+        this.state.message.length > 0 &&
+        <Message negative>
+          <p>{this.state.message}</p>
+        </Message>
+      }
+
       <Form>
         <Form.Field>
           <label>Dollar Amount</label>
@@ -65,16 +109,10 @@ export default class CreatePrice extends Component {
         <Form.Field>
           <label>Billing Scheme</label>
           <Select 
+            id="billingSchemeInput"
             options={this.billingSchemes}
             defaultValue={this.billingSchemes[0].value}
-            />
-        </Form.Field>
-
-        <Form.Field>
-          <label>Price Types</label>
-          <Select 
-            options={this.priceTypes}
-            defaultValue={this.priceTypes[0].value}
+            onChange={this.setBillingScheme}
             />
         </Form.Field>
 
