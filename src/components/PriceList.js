@@ -13,7 +13,10 @@ export default class PriceList extends Component {
 
     PriceRepository
       .getByProduct(props.productId)
-      .then(prices => this.setState({ prices }));
+      .then(prices => {
+        if (prices)
+          this.setState({ prices });
+      });
   }
 
   render = () =>
