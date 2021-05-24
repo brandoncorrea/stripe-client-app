@@ -1,9 +1,9 @@
 import { Component } from "react";
 import { Card } from 'semantic-ui-react';
+import AppRouter from "../AppRouter";
+import { Routes } from "../Config";
 import PriceRepository from "../services/priceRepository";
-import ActivationToggle from "./ActivationToggle";
-import ProductCardEditor from "./ProductCardEditor";
-import ProductCardStandard from './ProductCardStandard';
+import ConditionalIcon from "./ConditionalIcon";
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -26,32 +26,35 @@ export default class ProductCard extends Component {
   }
 
   getCardColor = () =>
-    this.state.product.active 
+    this.state.product.active
       ? 'green' 
       : 'red';
 
+  navigateToUpdateProduct = () =>
+    AppRouter.navigate(Routes.updateProduct + '?productId=' + this.state.product.id);
+
   render = () =>
-    <Card fluid color={this.getCardColor()}>
-      {
-        this.state.editing
-        ? 
-        <ProductCardEditor 
-          product={this.state.product}
-          price={this.state.price}
-          onSave={(product, price) => this.setState({ product, price, editing: false })}
-          onCancel={() => this.setState({ editing: false })}
-          />
-        : 
-        <ProductCardStandard 
-          product={this.state.product}
-          price={this.state.price}
-          onEdit={() => this.setState({ editing: true })}
-          />
-      }
-      <Card.Content extra>
-        <ActivationToggle 
-          product={this.state.product}
-          onChange={product => this.setState({ product })} />
+    <Card 
+      fluid 
+      color={this.getCardColor()}
+      onClick={this.navigateToUpdateProduct}>
+      <Card.Content>
+        <Card.Header content={this.state.product.name} />
+        <Card.Meta>
+          <ConditionalIcon 
+            condition={this.state.product.metadata.cafe}
+            name="coffee"
+            />
+          <ConditionalIcon 
+            condition={this.state.product.metadata.resource}
+            name="registered"
+            />
+          <ConditionalIcon 
+            condition={this.state.product.metadata.web}
+            name="globe"
+            />
+        </Card.Meta>
+        <Card.Description content={this.state.product.description} />
       </Card.Content>
     </Card>;
 }

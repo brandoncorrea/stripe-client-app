@@ -115,6 +115,7 @@ export default class ProductCardEditor extends Component {
           <input 
             id="nameInput"
             type="text" 
+            maxLength="250"
             defaultValue={this.state.product.name} 
             onChange={this.onNameChange} />
         </Form.Field>
@@ -124,6 +125,7 @@ export default class ProductCardEditor extends Component {
           <input 
             id="descriptionInput"
             type="text" 
+            maxLength="250"
             defaultValue={this.state.product.description} 
             onChange={this.onDescriptionChange} />
         </Form.Field>

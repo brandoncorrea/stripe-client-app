@@ -4,7 +4,8 @@ export const Routes = {
   home: '/',
   itemManagement: '/itemManagement',
   createItem: '/createItem',
-  login: '/login'
+  login: '/login',
+  updateProduct: '/updateProduct',
 }
 
 export const StripeApi = {
