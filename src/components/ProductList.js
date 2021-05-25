@@ -48,8 +48,7 @@ export default class ProductList extends Component {
   ButtonField = () =>
       this.state.has_more
       ?
-        <Button 
-          fluid
+        <Button fluid
           onClick={this.onHasMoreClicked}
           content='More...' />
       :
