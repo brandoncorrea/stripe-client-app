@@ -3,6 +3,27 @@ import { encodeURI } from '../helpers/encodingHelper';
 
 export default class PriceRepository {
   
+  static get = priceId =>
+    fetch(`${StripeApi.prices}/${priceId}?expand[]=product`, {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+
+  static getAfter = (productId, priceId) =>
+    fetch(`${StripeApi.prices}?product=${productId}&starting_after=${priceId}`, {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+  
+  static getByProductId = productId => 
+    fetch(`${StripeApi.prices}?product=${productId}`, {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+
   static getActive = productId =>
     fetch(`${StripeApi.prices}?product=${productId}&active=true`, 
     {

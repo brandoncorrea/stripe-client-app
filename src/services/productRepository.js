@@ -2,6 +2,14 @@ import { StripeApi } from '../Config';
 import { encodeURI } from '../helpers/encodingHelper';
 
 export default class ProductRepository {
+
+  static getById = productId =>
+    fetch(StripeApi.products + '/' + productId, {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+
   static getAll = () =>
     fetch(StripeApi.products, {
       method: 'GET',
@@ -34,7 +42,7 @@ export default class ProductRepository {
 
     static activate = productId =>
       ProductRepository.update(productId, { active: true });
-      
+
     static deactivate = productId =>
       ProductRepository.update(productId, { active: false });
 }
