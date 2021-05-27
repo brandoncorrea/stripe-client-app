@@ -21,7 +21,12 @@ export default class UpdatePrice extends Component {
 
     PriceRepository
       .get(this.state.price.id)
-      .then(price => this.setState({ price }));
+      .then(price => {
+        if (price.error)
+          AppRouter.navigate(Routes.itemManagement);
+        else
+          this.setState({ price })
+      });
 
     this.updatePriceClicked = this.updatePriceClicked.bind(this);
     this.onNicknameChange = this.onNicknameChange.bind(this);
