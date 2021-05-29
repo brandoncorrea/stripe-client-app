@@ -153,8 +153,8 @@ export default class CreatePrice extends Component {
     return '';
   }
 
-  navigateToPriceManagement = () =>
-    AppRouter.navigate(`${Routes.priceManagement}?productId=${this.state.productId}`);
+  navigateToUpdateProduct = () =>
+    AppRouter.navigate(`${Routes.updateProduct}?productId=${this.state.productId}`);
 
   onAggregateUsageChanged = (event, data) =>
     this.setState({ aggregate_usage: data.value });
@@ -274,7 +274,7 @@ export default class CreatePrice extends Component {
         <Button.Group fluid>
           <Button 
             content="Cancel"
-            onClick={this.navigateToPriceManagement} />
+            onClick={this.navigateToUpdateProduct} />
           <Button positive 
             content="Save"
             onClick={this.createPriceClicked} />

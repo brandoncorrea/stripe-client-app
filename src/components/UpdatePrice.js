@@ -2,7 +2,7 @@ import { Component } from "react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
 import PriceRepository from "../services/priceRepository";
-import { Container, Header, Form, Button, Input, Label, Dropdown } from 'semantic-ui-react';
+import { Container, Header, Form, Button, Label } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 
 export default class UpdatePrice extends Component {
@@ -44,8 +44,9 @@ export default class UpdatePrice extends Component {
       .then(price => {
         if (price.error)
           AppRouter.navigate(Routes.itemManagement);
-        else
-          this.setState({ price })
+        if (!price.nickname)
+          price.nickname = '';
+        this.setState({ price })
       });
 
     this.updatePriceClicked = this.updatePriceClicked.bind(this);
@@ -134,7 +135,7 @@ export default class UpdatePrice extends Component {
         </Form.Field>
 
         <Button.Group fluid>
-          <Button onClick={() => AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.price.product.id)}>Cancel</Button>
+          <Button onClick={() => AppRouter.navigate(Routes.updateProduct + '?productId=' + this.state.price.product.id)}>Cancel</Button>
           <Button positive onClick={this.updatePriceClicked}>Save</Button>
         </Button.Group>
     </Form>

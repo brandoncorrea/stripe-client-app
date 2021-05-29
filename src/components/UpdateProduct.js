@@ -4,6 +4,7 @@ import ErrorMessage from './ErrorMessage';
 import AppRouter from '../AppRouter';
 import { Routes } from "../Config";
 import ProductRepository from "../services/productRepository";
+import PriceList from "./PriceList";
 
 export default class UpdateProduct extends Component {
   
@@ -11,6 +12,7 @@ export default class UpdateProduct extends Component {
     super(props);
     this.state = {
       message: '',
+      showPrices: false,
       product: {
         name: '',
         description: '',
@@ -42,6 +44,7 @@ export default class UpdateProduct extends Component {
     this.onCafeChange = this.onCafeChange.bind(this);
     this.onResourceChange = this.onResourceChange.bind(this);
     this.onActiveChange = this.onActiveChange.bind(this);
+    this.onPricesClicked = this.onPricesClicked.bind(this);
   }
 
   getRequest = () => ({
@@ -119,6 +122,10 @@ export default class UpdateProduct extends Component {
     var product = this.state.product;
     product.active = event.target.checked;
     this.setState({ product });
+  }
+
+  onPricesClicked(event) {
+    this.setState({ showPrices: true });
   }
 
   render = () =>
@@ -214,11 +221,20 @@ export default class UpdateProduct extends Component {
         </Form.Field>
 
         <Form.Field>
-          <Button fluid onClick={() => AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.product.id)}>Prices</Button>
+          {
+            this.state.showPrices 
+            ? <PriceList productId={this.state.product.id}/>
+            : <Button fluid onClick={this.onPricesClicked}>Prices</Button>
+          }
         </Form.Field>
 
-        <Button.Group fluid widths="2">
-          <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
+        <Button.Group fluid widths="3">
+          <Button
+            negative 
+            onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
+          <Button 
+            onClick={() => AppRouter.navigate(Routes.createPrice + '?productId=' + this.state.product.id)}
+            content='Create Price' />
           <Button positive onClick={this.updateProductClicked}>Save</Button>
         </Button.Group>
       </Form>

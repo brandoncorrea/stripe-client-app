@@ -48,7 +48,6 @@ export default class PriceCard extends Component {
 
   render = () =>
     <Card 
-      fluid 
       color={this.getCardColor()}
       onClick={() => AppRouter.navigate(Routes.updatePrice + '?priceId=' + this.state.price.id)}>
       <Card.Content>
