@@ -1,6 +1,6 @@
 import { Component } from "react";
 import PriceRepository from "../services/priceRepository";
-import { Button, Message, Card } from 'semantic-ui-react';
+import { Button, Message, Card, Form } from 'semantic-ui-react';
 import PriceCard from './PriceCard';
 
 export default class PriceList extends Component {
@@ -21,12 +21,14 @@ export default class PriceList extends Component {
             has_more: res.has_more
           });
       });
+
+      this.onMoreClicked = this.onMoreClicked.bind(this);
   }
 
   PriceField = () =>
     this.state.prices && 
     this.state.prices.length > 0 &&
-    <Card.Group>
+    <Card.Group itemsPerRow={2}>
       {
         this.state.prices.map(i =>
           <PriceCard 
@@ -56,13 +58,15 @@ export default class PriceList extends Component {
         onClick={this.onMoreClicked}
         content='More...' />
     :
-      <Message>
-        No more items to display!
-      </Message>;
+      <Message content="No more items to display!" />;
 
   render = () =>
     <>
-      <this.PriceField />
-      <this.ButtonField />
+      <Form.Field>
+        <this.PriceField />
+      </Form.Field>
+      <Form.Field>
+        <this.ButtonField />
+      </Form.Field>
     </>;
 }

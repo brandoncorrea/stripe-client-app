@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Card, Button, Message } from 'semantic-ui-react';
+import { Card, Button, Message, Form } from 'semantic-ui-react';
 import ProductRepository from "../services/productRepository";
 import ProductCard from "./ProductCard";
 
@@ -21,7 +21,7 @@ export default class ProductList extends Component {
   ItemField = () =>
     this.state.products && 
     this.state.products.length > 0 &&
-    <Card.Group>
+    <Card.Group itemsPerRow={2}>
       {
         this.state.products.map(i =>
           <ProductCard 
@@ -58,7 +58,11 @@ export default class ProductList extends Component {
 
   render = () =>
     <>
-      <this.ItemField />
-      <this.ButtonField />
+      <Form.Field>
+        <this.ItemField />
+      </Form.Field>
+      <Form.Field>
+        <this.ButtonField />
+      </Form.Field>
     </>;
 }

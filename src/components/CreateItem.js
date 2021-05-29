@@ -97,7 +97,7 @@ export default class CreateItem extends Component {
             defaultChecked={true}
             />
         </Form.Field>
-        <Button.Group fluid>
+        <Button.Group fluid widths="2">
           <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
           <Button positive onClick={this.createProductClicked}>Save</Button>
         </Button.Group>

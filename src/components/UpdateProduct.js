@@ -123,7 +123,7 @@ export default class UpdateProduct extends Component {
 
   render = () =>
     <Container>
-      <Header as='h1' textAlign='center'>Create Product</Header>
+      <Header as='h1' textAlign='center'>Update Product</Header>
       <ErrorMessage message={this.state.message}/>
       <Form>
         <Form.Field>
@@ -212,10 +212,12 @@ export default class UpdateProduct extends Component {
             onChange={this.onActiveChange}
             />
         </Form.Field>
-        <Button.Group fluid>
-          <Button onClick={() => AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.product.id)}>Prices</Button>
-        </Button.Group>
-        <Button.Group fluid>
+
+        <Form.Field>
+          <Button fluid onClick={() => AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.product.id)}>Prices</Button>
+        </Form.Field>
+
+        <Button.Group fluid widths="2">
           <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
           <Button positive onClick={this.updateProductClicked}>Save</Button>
         </Button.Group>
