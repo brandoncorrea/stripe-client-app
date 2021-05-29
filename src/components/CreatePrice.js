@@ -135,7 +135,7 @@ export default class CreatePrice extends Component {
         if (res.error)
           this.setState({ message: res.error.message });
         else
-          AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.productId);
+          this.navigateToUpdateProduct();
       });
   }
 

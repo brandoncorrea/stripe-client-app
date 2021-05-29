@@ -60,7 +60,7 @@ export default class UpdatePrice extends Component {
       nickname: this.state.price.nickname,
       active: this.state.price.active,
     })
-    .then(res => AppRouter.navigate(Routes.priceManagement + '?productId=' + this.state.price.product.id));
+    .then(res => AppRouter.navigate(Routes.updateProduct + '?productId=' + this.state.price.product.id));
   
   }
     
