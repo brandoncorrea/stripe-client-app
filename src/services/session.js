@@ -1,6 +1,7 @@
 import * as Cookies from "js-cookie";
 import React from 'react';
 import jwt_decode from 'jwt-decode';
+import * as appSettings from '../appSettings.json';
 
 const tokenName = 'google-token';
 
@@ -28,6 +29,16 @@ export function getUser() {
     return null;
 
   return jwt_decode(token);
+}
+
+export function getUserPermission() {
+  var email = getUser().email
+  if (email === undefined)
+    return 0;
+  var user = appSettings.Users[email];
+  if (user === undefined)
+    return 0;
+  return user.PermissionID;
 }
 
 export const SessionContext = React.createContext(getSessionCookie());

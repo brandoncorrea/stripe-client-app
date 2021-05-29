@@ -12,6 +12,7 @@ import Login from './components/Login';
 import UpdateProduct from "./components/UpdateProduct";
 import CreatePrice from "./components/CreatePrice";
 import UpdatePrice from "./components/UpdatePrice";
+import { getUserPermission } from './services/session';
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -19,6 +20,19 @@ export default class AppRouter extends Component {
 
   static getSearchParam = name =>
     new URLSearchParams(window.location.search).get(name);
+
+  GuardedRoute(props) {
+    if (props.permissionSet <= getUserPermission())
+      return <Route
+        path={props.path}
+        component={props.component} 
+        />;
+    
+    return <Route exact 
+      path={props.path}
+      component={props.defaultComponent}
+      />
+  }
 
   render = () =>
     <Router>
@@ -31,25 +45,35 @@ export default class AppRouter extends Component {
           path={Routes.login}
           component={Login}
           />
-        <Route 
+        <this.GuardedRoute 
+          permissionSet={2}
           path={Routes.itemManagement}
           component={ItemManagement}
+          defaultComponent={Home}
           />
-        <Route 
+        <this.GuardedRoute
+          permissionSet={2} 
           path={Routes.createItem}
           component={CreateItem}
+          defaultComponent={Home}
           />
-        <Route 
+        <this.GuardedRoute
+          permissionSet={2} 
           path={Routes.createPrice}
           component={CreatePrice}
+          defaultComponent={Home}
           />
-        <Route 
+        <this.GuardedRoute
+          permissionSet={2} 
           path={Routes.updateProduct}
           component={UpdateProduct}
+          defaultComponent={Home}
           />
-        <Route 
+        <this.GuardedRoute
+          permissionSet={2} 
           path={Routes.updatePrice}
           component={UpdatePrice}
+          defaultComponent={Home}
           />
       </Switch>
     </Router>;
