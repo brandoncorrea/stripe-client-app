@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Container, Grid, Header, Button, Card } from "semantic-ui-react";
+import { Container, Grid, Header, Button, Card, Confirm } from "semantic-ui-react";
 import ProductRepository from "../services/productRepository";
 import LookupItemCard from './LookupItemCard';
 import ShoppingCartRow from "./ShoppingCartRow";
@@ -11,11 +11,16 @@ export default class PointOfSale extends Component {
     this.state = {
       shoppingCartItems: [],
       products: [],
+      confirmVoidOrderOpen: false,
     };
 
     ProductRepository
       .getAll()
       .then(res => this.setState({ products: res.data }));
+
+    this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
+    this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
+    this.voidOrder = this.voidOrder.bind(this);
   }
 
   addItem(product) {
@@ -30,6 +35,13 @@ export default class PointOfSale extends Component {
       shoppingCartItems: this.state.shoppingCartItems
         .filter(i => this.state.shoppingCartItems.indexOf(i) !== index) 
     });
+
+  showConfirmVoidOrder = () => this.setState({ confirmVoidOrderOpen: true });
+  closeConfirmVoidOrder = () => this.setState({ confirmVoidOrderOpen: false });
+  voidOrder = () => {
+    this.setState({ shoppingCartItems: [] })
+    this.closeConfirmVoidOrder();
+  };
 
   render = () =>
     <Container>
@@ -69,8 +81,17 @@ export default class PointOfSale extends Component {
           </Grid.Column>
           <Grid.Column>
             <Button content="Pay" />
+            <Button content="Void Order" onClick={this.showConfirmVoidOrder} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      <Confirm
+        content='Are you sure you want to void the order?'
+        cancelButton='Return to Order'
+        confirmButton='Void the Order'
+        open={this.state.confirmVoidOrderOpen}
+        onCancel={this.closeConfirmVoidOrder}
+        onConfirm={this.voidOrder}
+        />
     </Container>;
 }
