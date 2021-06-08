@@ -1,5 +1,7 @@
 import { Component } from "react";
 import { Container, Grid, Header, Button, Card, Confirm } from "semantic-ui-react";
+import AppRouter from "../AppRouter";
+import { Routes } from "../Config";
 import ProductRepository from "../services/productRepository";
 import LookupItemCard from './LookupItemCard';
 import ShoppingCartRow from "./ShoppingCartRow";
@@ -12,6 +14,7 @@ export default class PointOfSale extends Component {
       shoppingCartItems: [],
       products: [],
       confirmVoidOrderOpen: false,
+      confirmReturnHomeOpen: false,
     };
 
     ProductRepository
@@ -21,7 +24,17 @@ export default class PointOfSale extends Component {
     this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
     this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
     this.voidOrder = this.voidOrder.bind(this);
+    this.returnToHomepage = this.returnToHomepage.bind(this);
   }
+
+  returnToHomepage() {
+    if (this.state.shoppingCartItems.length > 0)
+      this.setState({ confirmReturnHomeOpen: true });
+    else
+      AppRouter.navigate(Routes.home);
+  }
+
+  closeConfirmReturnHome = () => this.setState({ confirmReturnHomeOpen: false });
 
   addItem(product) {
     product.key = this.state.shoppingCartItems.length;
@@ -36,7 +49,10 @@ export default class PointOfSale extends Component {
         .filter(i => this.state.shoppingCartItems.indexOf(i) !== index) 
     });
 
-  showConfirmVoidOrder = () => this.setState({ confirmVoidOrderOpen: true });
+  showConfirmVoidOrder = () => {
+    if (this.state.shoppingCartItems.length > 0)
+      this.setState({ confirmVoidOrderOpen: true });
+  }
   closeConfirmVoidOrder = () => this.setState({ confirmVoidOrderOpen: false });
   voidOrder = () => {
     this.setState({ shoppingCartItems: [] })
@@ -80,8 +96,9 @@ export default class PointOfSale extends Component {
 
           </Grid.Column>
           <Grid.Column>
-            <Button content="Pay" />
-            <Button content="Void Order" onClick={this.showConfirmVoidOrder} />
+            <Button positive content="Pay" />
+            <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
+            <Button content="Back" onClick={this.returnToHomepage} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -92,6 +109,14 @@ export default class PointOfSale extends Component {
         open={this.state.confirmVoidOrderOpen}
         onCancel={this.closeConfirmVoidOrder}
         onConfirm={this.voidOrder}
+        />
+      <Confirm
+        content='Are you sure you want to exit to the Homepage? The current order will be voided.'
+        cancelButton='Return to Order'
+        confirmButton='Void and Exit'
+        open={this.state.confirmReturnHomeOpen}
+        onCancel={this.closeConfirmReturnHome}
+        onConfirm={() => AppRouter.navigate(Routes.home)}
         />
     </Container>;
 }
