@@ -21,7 +21,7 @@ export default class PointOfSale extends Component {
   addItem(product) {
     product.key = this.state.shoppingCartItems.length;
     var shoppingCartItems = this.state.shoppingCartItems;
-    shoppingCartItems.push(product);
+    shoppingCartItems.unshift(product);
     this.setState({ shoppingCartItems });
   }
 
@@ -37,7 +37,7 @@ export default class PointOfSale extends Component {
       <Grid columns={2} divided>
         <Grid.Row>
           <Grid.Column>
-            <Card.Group>
+            <Card.Group style={{ overflow: 'auto', maxHeight: '500px' }} itemsPerRow={3}>
               {
                 this.state.products.map(i =>
                   <LookupItemCard 
@@ -48,7 +48,11 @@ export default class PointOfSale extends Component {
             </Card.Group>
           </Grid.Column>
           <Grid.Column>
-            <Grid divided columns={2}>
+            <Grid 
+              id='shoppingCardGrid'
+              divided 
+              columns={2} 
+              style={{ overflow: 'auto', maxHeight: '500px' }}>
             {
               this.state.shoppingCartItems.map(i =>
                 <ShoppingCartRow 
