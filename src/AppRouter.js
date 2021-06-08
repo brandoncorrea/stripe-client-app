@@ -12,7 +12,8 @@ import Login from './components/Login';
 import UpdateProduct from "./components/UpdateProduct";
 import CreatePrice from "./components/CreatePrice";
 import UpdatePrice from "./components/UpdatePrice";
-import { getUserPermission } from './services/session';
+import PointOfSale from "./components/PointOfSale";
+import GuardedRoute from "./components/GuardedRoute";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -20,19 +21,6 @@ export default class AppRouter extends Component {
 
   static getSearchParam = name =>
     new URLSearchParams(window.location.search).get(name);
-
-  GuardedRoute(props) {
-    if (props.permissionSet <= getUserPermission())
-      return <Route
-        path={props.path}
-        component={props.component} 
-        />;
-    
-    return <Route exact 
-      path={props.path}
-      component={props.defaultComponent}
-      />
-  }
 
   render = () =>
     <Router>
@@ -45,31 +33,37 @@ export default class AppRouter extends Component {
           path={Routes.login}
           component={Login}
           />
-        <this.GuardedRoute 
+        <GuardedRoute 
           permissionSet={2}
           path={Routes.itemManagement}
           component={ItemManagement}
           defaultComponent={Home}
           />
-        <this.GuardedRoute
+        <GuardedRoute 
+          permissionSet={1}
+          path={Routes.pointOfSale}
+          component={PointOfSale}
+          defaultComponent={Home}
+          />
+        <GuardedRoute
           permissionSet={2} 
           path={Routes.createItem}
           component={CreateItem}
           defaultComponent={Home}
           />
-        <this.GuardedRoute
+        <GuardedRoute
           permissionSet={2} 
           path={Routes.createPrice}
           component={CreatePrice}
           defaultComponent={Home}
           />
-        <this.GuardedRoute
+        <GuardedRoute
           permissionSet={2} 
           path={Routes.updateProduct}
           component={UpdateProduct}
           defaultComponent={Home}
           />
-        <this.GuardedRoute
+        <GuardedRoute
           permissionSet={2} 
           path={Routes.updatePrice}
           component={UpdatePrice}

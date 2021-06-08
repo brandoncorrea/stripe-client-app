@@ -31,6 +31,18 @@ export default class Home extends Component{
           </Form.Field>
         }
 
+        {
+          getUserPermission() >= 1 &&
+          <Form.Field>
+            <Card.Group>
+              <Card
+                fluid 
+                header='Point of Sale' 
+                onClick={() => AppRouter.navigate(Routes.pointOfSale)}/>
+            </Card.Group>
+          </Form.Field>
+        }
+
         <Form.Field>
           <Button.Group fluid>
             <LogoutButton />;
