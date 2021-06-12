@@ -6,13 +6,14 @@ export default class ShoppingCartRow extends Component {
     super(props);
     this.state = {
       onDelete: props.onDelete,
-      content: props.content
+      price: props.price
     };
   }
 
   render = () =>
     <Grid.Row>
-      <Grid.Column verticalAlign='middle'>{this.state.content}</Grid.Column>
+      <Grid.Column verticalAlign='middle'>{this.state.price.product.name}</Grid.Column>
+      <Grid.Column>{(this.state.price.unit_amount / 100).toFixed(2)}</Grid.Column>
       <Grid.Column>
         <Button
           negative 

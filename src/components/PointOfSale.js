@@ -79,13 +79,13 @@ export default class PointOfSale extends Component {
             <Grid 
               id='shoppingCardGrid'
               divided 
-              columns={2} 
+              columns={3} 
               style={{ overflow: 'auto', maxHeight: '600px' }}>
             {
               this.state.shoppingCartItems.map(i =>
                 <ShoppingCartRow 
                   key={i.key}
-                  content={i.product.name} 
+                  price={i} 
                   onDelete={() => this.removeItem(this.state.shoppingCartItems.indexOf(i))} />)
             }
             </Grid>
