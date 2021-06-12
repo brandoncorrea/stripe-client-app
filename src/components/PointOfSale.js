@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Container, Grid, Header, Button, Card, Confirm } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import ProductRepository from "../services/productRepository";
+import PriceRepository from "../services/priceRepository";
 import LookupItemCard from './LookupItemCard';
 import ShoppingCartRow from "./ShoppingCartRow";
 
@@ -12,14 +12,14 @@ export default class PointOfSale extends Component {
     super(props);
     this.state = {
       shoppingCartItems: [],
-      products: [],
+      prices: [],
       confirmVoidOrderOpen: false,
       confirmReturnHomeOpen: false,
     };
 
-    ProductRepository
+    PriceRepository
       .getAll()
-      .then(res => this.setState({ products: res.data }));
+      .then(prices => this.setState({ prices }));
 
     this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
     this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
@@ -36,10 +36,10 @@ export default class PointOfSale extends Component {
 
   closeConfirmReturnHome = () => this.setState({ confirmReturnHomeOpen: false });
 
-  addItem(product) {
-    product.key = this.state.shoppingCartItems.length;
+  addItem(price) {
+    price.key = this.state.shoppingCartItems.length;
     var shoppingCartItems = this.state.shoppingCartItems;
-    shoppingCartItems.unshift(product);
+    shoppingCartItems.unshift(price);
     this.setState({ shoppingCartItems });
   }
 
@@ -65,12 +65,12 @@ export default class PointOfSale extends Component {
       <Grid columns={2} divided>
         <Grid.Row>
           <Grid.Column>
-            <Card.Group style={{ overflow: 'auto', maxHeight: '500px' }} itemsPerRow={3}>
+            <Card.Group style={{ overflow: 'auto', maxHeight: '600px' }} itemsPerRow={3}>
               {
-                this.state.products.map(i =>
+                this.state.prices.map(i =>
                   <LookupItemCard 
                     key={i.id}
-                    product={i}
+                    price={i}
                     onClick={() => this.addItem(Object.assign({}, i))} />)
               }
             </Card.Group>
@@ -80,12 +80,12 @@ export default class PointOfSale extends Component {
               id='shoppingCardGrid'
               divided 
               columns={2} 
-              style={{ overflow: 'auto', maxHeight: '500px' }}>
+              style={{ overflow: 'auto', maxHeight: '600px' }}>
             {
               this.state.shoppingCartItems.map(i =>
                 <ShoppingCartRow 
                   key={i.key}
-                  content={i.name} 
+                  content={i.product.name} 
                   onDelete={() => this.removeItem(this.state.shoppingCartItems.indexOf(i))} />)
             }
             </Grid>

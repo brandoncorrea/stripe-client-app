@@ -1,4 +1,4 @@
-import { StripeApi } from '../Config';
+import { Routes, StripeApi } from '../Config';
 import { encodeURI } from '../helpers/encodingHelper';
 
 export default class PriceRepository {
@@ -26,6 +26,15 @@ export default class PriceRepository {
 
   static getActive = productId =>
     fetch(`${StripeApi.prices}?product=${productId}&active=true`, 
+    {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json())
+    .then(json => json.data);
+
+  static getAll = () =>
+    fetch(`${StripeApi.prices}?expand[]=data.product&active=true`,
     {
       method: 'GET',
       headers: StripeApi.headers
