@@ -1,4 +1,4 @@
-import { Routes, StripeApi } from '../Config';
+import { StripeApi } from '../Config';
 import { encodeURI } from '../helpers/encodingHelper';
 
 export default class PriceRepository {

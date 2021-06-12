@@ -16,19 +16,6 @@ export default class PointOfSale extends Component {
       confirmReturnHomeOpen: false,
     };
 
-    var prices = {
-      "priceId1": {
-        unit_amount: 0.00,
-        name: '',
-        count: 0
-      },
-      "priceId2": {
-        unit_amount: 0.00,
-        name: '',
-        count: 0
-      }
-    }
-
     PriceRepository
       .getAll()
       .then(prices => this.setState({ prices }));
@@ -108,14 +95,13 @@ export default class PointOfSale extends Component {
           <Grid.Column>
             <Grid 
               id='shoppingCardGrid'
-              columns={5} 
+              columns={4} 
               style={{ overflow: 'auto', maxHeight: '600px' }}>
             {
               this.state.shoppingCartItems.map(i =>
                 <Grid.Row key={i.id}>
-                  <Grid.Column>{i.count}</Grid.Column>
                   <Grid.Column verticalAlign='middle'>{i.product.name}</Grid.Column>
-                  <Grid.Column verticalAlign='middle'><Label>@ ${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
+                  <Grid.Column verticalAlign='middle'><Label>{i.count} @ ${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
                   <Grid.Column verticalAlign='middle'><Label>${(i.unit_amount * i.count / 100).toFixed(2)}</Label></Grid.Column>
                   <Grid.Column>
                     <Button
