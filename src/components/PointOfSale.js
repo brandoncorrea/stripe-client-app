@@ -16,6 +16,19 @@ export default class PointOfSale extends Component {
       confirmReturnHomeOpen: false,
     };
 
+    var prices = {
+      "priceId1": {
+        unit_amount: 0.00,
+        name: '',
+        count: 0
+      },
+      "priceId2": {
+        unit_amount: 0.00,
+        name: '',
+        count: 0
+      }
+    }
+
     PriceRepository
       .getAll()
       .then(prices => this.setState({ prices }));
@@ -36,17 +49,31 @@ export default class PointOfSale extends Component {
   closeConfirmReturnHome = () => this.setState({ confirmReturnHomeOpen: false });
 
   addItem(price) {
-    price.key = this.state.shoppingCartItems.length;
     var shoppingCartItems = this.state.shoppingCartItems;
-    shoppingCartItems.unshift(price);
+    var foundIndex = shoppingCartItems.findIndex(i => i.id === price.id);
+
+    if (foundIndex >= 0)
+      shoppingCartItems[foundIndex].count += 1;
+    else {
+      price.count = 1;
+      shoppingCartItems.unshift(price);
+    }
+      
     this.setState({ shoppingCartItems });
   }
 
-  removeItem = index => 
-    this.setState({
-      shoppingCartItems: this.state.shoppingCartItems
-        .filter(i => this.state.shoppingCartItems.indexOf(i) !== index) 
-    });
+  removeItem(priceId) {
+    var itemIndex = this.state.shoppingCartItems.findIndex(i => i.id === priceId);
+    if (itemIndex < 0) return;
+
+    var shoppingCartItems = this.state.shoppingCartItems;
+    if (shoppingCartItems[itemIndex].count < 2)
+      shoppingCartItems = shoppingCartItems.filter(i => i.id !== priceId);
+    else
+      shoppingCartItems[itemIndex].count--;
+
+    this.setState({ shoppingCartItems });
+  }
 
   showConfirmVoidOrder = () => {
     if (this.state.shoppingCartItems.length > 0)
@@ -57,6 +84,10 @@ export default class PointOfSale extends Component {
     this.setState({ shoppingCartItems: [] })
     this.closeConfirmVoidOrder();
   };
+
+  getOrderTotal = () => 
+    (this.state.shoppingCartItems.reduce((a, b) => a + b.unit_amount * b.count, 0) / 100).toFixed(2)
+  
 
   render = () =>
     <Container>
@@ -77,19 +108,20 @@ export default class PointOfSale extends Component {
           <Grid.Column>
             <Grid 
               id='shoppingCardGrid'
-              divided 
-              columns={3} 
+              columns={5} 
               style={{ overflow: 'auto', maxHeight: '600px' }}>
             {
               this.state.shoppingCartItems.map(i =>
-                <Grid.Row key={i.key}>
+                <Grid.Row key={i.id}>
+                  <Grid.Column>{i.count}</Grid.Column>
                   <Grid.Column verticalAlign='middle'>{i.product.name}</Grid.Column>
-                  <Grid.Column><Label>${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
+                  <Grid.Column verticalAlign='middle'><Label>@ ${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
+                  <Grid.Column verticalAlign='middle'><Label>${(i.unit_amount * i.count / 100).toFixed(2)}</Label></Grid.Column>
                   <Grid.Column>
                     <Button
                       negative 
                       content='Void'
-                      onClick={() => this.removeItem(this.state.shoppingCartItems.indexOf(i))}/>
+                      onClick={() => this.removeItem(i.id)}/>
                   </Grid.Column>
                 </Grid.Row>)
             }
@@ -104,7 +136,7 @@ export default class PointOfSale extends Component {
             <Button positive content="Pay" />
             <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
             <Button content="Back" onClick={this.returnToHomepage} />
-            <Label>${(this.state.shoppingCartItems.reduce((a, b) => a + b.unit_amount, 0) / 100).toFixed(2)}</Label>
+            <Label>${this.getOrderTotal()}</Label>
           </Grid.Column>
         </Grid.Row>
       </Grid>
