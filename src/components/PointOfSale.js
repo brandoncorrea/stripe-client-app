@@ -1,10 +1,9 @@
 import { Component } from "react";
-import { Container, Grid, Header, Button, Card, Confirm } from "semantic-ui-react";
+import { Container, Grid, Header, Button, Card, Confirm, Label } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
 import PriceRepository from "../services/priceRepository";
 import LookupItemCard from './LookupItemCard';
-import ShoppingCartRow from "./ShoppingCartRow";
 
 export default class PointOfSale extends Component {
   currentId = 0;
@@ -85,7 +84,7 @@ export default class PointOfSale extends Component {
               this.state.shoppingCartItems.map(i =>
                 <Grid.Row key={i.key}>
                   <Grid.Column verticalAlign='middle'>{i.product.name}</Grid.Column>
-                  <Grid.Column>{(i.unit_amount / 100).toFixed(2)}</Grid.Column>
+                  <Grid.Column><Label>${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
                   <Grid.Column>
                     <Button
                       negative 
@@ -105,6 +104,7 @@ export default class PointOfSale extends Component {
             <Button positive content="Pay" />
             <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
             <Button content="Back" onClick={this.returnToHomepage} />
+            <Label>${(this.state.shoppingCartItems.reduce((a, b) => a + b.unit_amount, 0) / 100).toFixed(2)}</Label>
           </Grid.Column>
         </Grid.Row>
       </Grid>
