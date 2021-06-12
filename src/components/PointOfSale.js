@@ -83,10 +83,16 @@ export default class PointOfSale extends Component {
               style={{ overflow: 'auto', maxHeight: '600px' }}>
             {
               this.state.shoppingCartItems.map(i =>
-                <ShoppingCartRow 
-                  key={i.key}
-                  price={i} 
-                  onDelete={() => this.removeItem(this.state.shoppingCartItems.indexOf(i))} />)
+                <Grid.Row key={i.key}>
+                  <Grid.Column verticalAlign='middle'>{i.product.name}</Grid.Column>
+                  <Grid.Column>{(i.unit_amount / 100).toFixed(2)}</Grid.Column>
+                  <Grid.Column>
+                    <Button
+                      negative 
+                      content='Void'
+                      onClick={() => this.removeItem(this.state.shoppingCartItems.indexOf(i))}/>
+                  </Grid.Column>
+                </Grid.Row>)
             }
             </Grid>
           </Grid.Column>
