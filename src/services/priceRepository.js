@@ -34,13 +34,29 @@ export default class PriceRepository {
     .then(json => json.data);
 
   static getAll = () =>
-    fetch(`${StripeApi.prices}?expand[]=data.product&active=true`,
+    fetch(`${StripeApi.prices}?expand[]=data.product&active=true&limit=9`,
     {
       method: 'GET',
       headers: StripeApi.headers
     })
-    .then(res => res.json())
-    .then(json => json.data);
+    .then(res => res.json());
+
+  static getAllBefore = priceId =>
+    fetch(`${StripeApi.prices}?expand[]=data.product&active=true&limit=9&ending_before=${priceId}`,
+    {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+
+  static getAllAfter = priceId =>
+    fetch(`${StripeApi.prices}?expand[]=data.product&active=true&limit=9&starting_after=${priceId}`,
+    {
+      method: 'GET',
+      headers: StripeApi.headers
+    })
+    .then(res => res.json());
+    
 
   static create = priceRequest =>
     fetch(StripeApi.prices, 

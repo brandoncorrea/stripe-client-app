@@ -14,16 +14,23 @@ export default class PointOfSale extends Component {
       prices: [],
       confirmVoidOrderOpen: false,
       confirmReturnHomeOpen: false,
+      has_more_before: false,
+      has_more_after: false,
     };
 
     PriceRepository
       .getAll()
-      .then(prices => this.setState({ prices }));
+      .then(res => this.setState({ 
+        prices: res.data,
+        has_more_after: res.has_more
+      }));
 
     this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
     this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
     this.voidOrder = this.voidOrder.bind(this);
     this.returnToHomepage = this.returnToHomepage.bind(this);
+    this.showNextItemSet = this.showNextItemSet.bind(this);
+    this.showPrevItemSet = this.showPrevItemSet.bind(this);
   }
 
   returnToHomepage() {
@@ -45,7 +52,7 @@ export default class PointOfSale extends Component {
       price.count = 1;
       shoppingCartItems.unshift(price);
     }
-      
+
     this.setState({ shoppingCartItems });
   }
 
@@ -75,14 +82,39 @@ export default class PointOfSale extends Component {
   getOrderTotal = () => 
     (this.state.shoppingCartItems.reduce((a, b) => a + b.unit_amount * b.count, 0) / 100).toFixed(2)
   
+  showPrevItemSet() {
+    if (this.state.prices.length < 1 || !this.state.has_more_before) 
+      return;
 
+    PriceRepository
+    .getAllBefore(this.state.prices[0].id)
+    .then(res => this.setState({
+      prices: res.data,
+      has_more_before: res.has_more,
+      has_more_after: true
+    }));
+  }
+
+  showNextItemSet() {
+    if (this.state.prices.length < 1 || !this.state.has_more_after)
+      return;
+      
+    PriceRepository
+    .getAllAfter(this.state.prices[this.state.prices.length - 1].id)
+    .then(res => this.setState({
+      prices: res.data,
+      has_more_before: true,
+      has_more_after: res.has_more
+    }));
+  }
+    
   render = () =>
     <Container>
       <Header as="h1" textAlign="center" content="Point of Sale" />
       <Grid columns={2} divided>
         <Grid.Row>
-          <Grid.Column>
-            <Card.Group style={{ overflow: 'auto', maxHeight: '600px' }} itemsPerRow={3}>
+          <Grid.Column style={{ overflow: 'auto', height: '600px' }}>
+            <Card.Group itemsPerRow={3} style={{ padding: '10px' }}>
               {
                 this.state.prices.map(i =>
                   <LookupItemCard 
@@ -92,11 +124,10 @@ export default class PointOfSale extends Component {
               }
             </Card.Group>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column style={{ overflow: 'auto', height: '600px' }}>
             <Grid 
               id='shoppingCardGrid'
-              columns={4} 
-              style={{ overflow: 'auto', maxHeight: '600px' }}>
+              columns={4} >
             {
               this.state.shoppingCartItems.map(i =>
                 <Grid.Row key={i.id}>
@@ -116,7 +147,14 @@ export default class PointOfSale extends Component {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-
+            <Button 
+              onClick={this.showPrevItemSet} 
+              content="Previous" 
+              disabled={!this.state.has_more_before} />
+            <Button 
+              onClick={this.showNextItemSet} 
+              content="Next"
+              disabled={!this.state.has_more_after} />
           </Grid.Column>
           <Grid.Column>
             <Button positive content="Pay" />
