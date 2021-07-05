@@ -5,6 +5,7 @@ export const Routes = {
 
   /* Point of Sale Routes */
   pointOfSale: '/pointOfSale',
+  lookup: '/lookup',
 
   /* Item Management Routes */
   itemManagement: '/itemManagement',

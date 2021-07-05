@@ -13,6 +13,7 @@ import UpdateProduct from "./components/UpdateProduct";
 import CreatePrice from "./components/CreatePrice";
 import UpdatePrice from "./components/UpdatePrice";
 import PointOfSale from "./components/PointOfSale";
+import LookupMenu from "./components/LookupMenu";
 import GuardedRoute from "./components/GuardedRoute";
 
 export default class AppRouter extends Component {
@@ -44,6 +45,12 @@ export default class AppRouter extends Component {
           path={Routes.pointOfSale}
           component={PointOfSale}
           defaultComponent={Home}
+          />
+        <GuardedRoute
+          permissionSet={1} 
+          path={Routes.lookup}
+          component={LookupMenu}
+          defaultComponent={Home} 
           />
         <GuardedRoute
           permissionSet={2} 
