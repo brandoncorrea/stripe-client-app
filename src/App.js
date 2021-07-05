@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AppRouter from './AppRouter';
+import AppMenu from './AppMenu';
 import Login from "./components/Login";
 import { getSessionCookie, SessionContext } from "./services/session";
 
@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <SessionContext.Provider value={session}>
-      <AppRouter />
+      <AppMenu />
     </SessionContext.Provider>
   );
 }
