@@ -3,7 +3,7 @@ import { Container, Header, Form, Button } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 import AppRouter from '../AppRouter';
 import { Routes } from "../Config";
-import ProductRepository from "../services/productRepository";
+import ProductRepository from "../data/productRepository";
 import PriceList from "./PriceList";
 
 export default class UpdateProduct extends Component {

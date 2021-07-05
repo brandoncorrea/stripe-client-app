@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import AppRouter from '../AppRouter';
-import ProductRepository from '../services/productRepository';
+import ProductRepository from '../data/productRepository';
 import { Routes } from '../Config';
 import { Form, Button, Container, Header } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';

@@ -1,6 +1,6 @@
 import { Component } from "react";
-import PriceRepository from "../services/priceRepository";
-import ProductRepository from "../services/productRepository";
+import PriceRepository from "../data/priceRepository";
+import ProductRepository from "../data/productRepository";
 import { Card, Form, Button } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 

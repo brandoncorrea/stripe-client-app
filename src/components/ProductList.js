@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { Card, Button, Message, Form } from 'semantic-ui-react';
-import ProductRepository from "../services/productRepository";
+import ProductRepository from "../data/productRepository";
 import ProductCard from "./ProductCard";
 
 export default class ProductList extends Component {

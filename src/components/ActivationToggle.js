@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { Button } from 'semantic-ui-react';
-import ProductRepository from "../services/productRepository";
+import ProductRepository from "../data/productRepository";
 
 export default class ActivationToggle extends Component {
   constructor(props) {

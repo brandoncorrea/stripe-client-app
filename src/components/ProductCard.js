@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Card } from 'semantic-ui-react';
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import PriceRepository from "../services/priceRepository";
+import PriceRepository from "../data/priceRepository";
 import ConditionalIcon from "./ConditionalIcon";
 
 export default class ProductCard extends Component {

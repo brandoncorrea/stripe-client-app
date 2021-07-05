@@ -2,9 +2,9 @@ import { Component } from "react";
 import { Container, Grid, Header, Button, Card, Confirm, Label } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { EventNames, Routes } from "../Config";
-import PriceRepository from "../services/priceRepository";
+import PriceRepository from "../data/priceRepository";
 import LookupItemCard from './LookupItemCard';
-import ShoppingCartRepository from '../services/shoppingCartRepository';
+import ShoppingCartRepository from '../data/shoppingCartRepository';
 import ShoppingCart from "./ShoppingCart";
 import EventEmitter from "../helpers/eventEmitter";
 
