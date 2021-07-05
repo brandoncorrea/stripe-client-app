@@ -25,3 +25,7 @@ export const StripeApi = {
   products: 'https://api.stripe.com/v1/products',
   prices: 'https://api.stripe.com/v1/prices'
 }
+
+export const EventNames = {
+  shoppingCartItemsChanged: 'shoppingCartItemsChanged'
+}

@@ -1,17 +1,22 @@
 import { Component } from "react";
 import { Container, Grid, Header, Button, Card, Confirm, Label } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
-import { Routes } from "../Config";
+import { EventNames, Routes } from "../Config";
 import PriceRepository from "../services/priceRepository";
 import LookupItemCard from './LookupItemCard';
+import ShoppingCartRepository from '../services/shoppingCartRepository';
+import ShoppingCart from "./ShoppingCart";
+import EventEmitter from "../helpers/eventEmitter";
 
 export default class PointOfSale extends Component {
   currentId = 0;
+  shoppingCartItems = new ShoppingCartRepository();
+
   constructor(props) {
     super(props);
     this.state = {
-      shoppingCartItems: [],
       prices: [],
+      items: this.shoppingCartItems.getItemArray(),
       confirmVoidOrderOpen: false,
       confirmReturnHomeOpen: false,
       has_more_before: false,
@@ -25,6 +30,10 @@ export default class PointOfSale extends Component {
         has_more_after: res.has_more
       }));
 
+    EventEmitter.subscribe(
+      EventNames.shoppingCartItemsChanged,
+      items => this.setState({ items }));
+
     this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
     this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
     this.voidOrder = this.voidOrder.bind(this);
@@ -34,53 +43,39 @@ export default class PointOfSale extends Component {
   }
 
   returnToHomepage() {
-    if (this.state.shoppingCartItems.length > 0)
+    if (!this.shoppingCartItems.isEmpty())
       this.setState({ confirmReturnHomeOpen: true });
     else
       AppRouter.navigate(Routes.home);
   }
 
-  closeConfirmReturnHome = () => this.setState({ confirmReturnHomeOpen: false });
+  closeConfirmReturnHome = () => 
+    this.setState({ confirmReturnHomeOpen: false });
 
-  addItem(price) {
-    var shoppingCartItems = this.state.shoppingCartItems;
-    var foundIndex = shoppingCartItems.findIndex(i => i.id === price.id);
+  addItem = price =>
+    this.shoppingCartItems.addItem(price);
 
-    if (foundIndex >= 0)
-      shoppingCartItems[foundIndex].count += 1;
-    else {
-      price.count = 1;
-      shoppingCartItems.unshift(price);
-    }
+  removeItem = priceId => 
+    this.shoppingCartItems.voidItem(priceId);
 
-    this.setState({ shoppingCartItems });
-  }
-
-  removeItem(priceId) {
-    var itemIndex = this.state.shoppingCartItems.findIndex(i => i.id === priceId);
-    if (itemIndex < 0) return;
-
-    var shoppingCartItems = this.state.shoppingCartItems;
-    if (shoppingCartItems[itemIndex].count < 2)
-      shoppingCartItems = shoppingCartItems.filter(i => i.id !== priceId);
-    else
-      shoppingCartItems[itemIndex].count--;
-
-    this.setState({ shoppingCartItems });
-  }
-
-  showConfirmVoidOrder = () => {
-    if (this.state.shoppingCartItems.length > 0)
+  showConfirmVoidOrder() {
+    if (!this.shoppingCartItems.isEmpty())
       this.setState({ confirmVoidOrderOpen: true });
   }
-  closeConfirmVoidOrder = () => this.setState({ confirmVoidOrderOpen: false });
+
+  closeConfirmVoidOrder = () => 
+    this.setState({ confirmVoidOrderOpen: false });
+  
   voidOrder = () => {
-    this.setState({ shoppingCartItems: [] })
+    this.shoppingCartItems.clearAllItems();
     this.closeConfirmVoidOrder();
   };
 
   getOrderTotal = () => 
-    (this.state.shoppingCartItems.reduce((a, b) => a + b.unit_amount * b.count, 0) / 100).toFixed(2)
+    (this.state.items
+      .reduce((cur, price) => cur + price.unit_amount * price.count, 0) 
+      / 100)
+    .toFixed(2);
   
   showPrevItemSet() {
     if (this.state.prices.length < 1 || !this.state.has_more_before) 
@@ -125,24 +120,7 @@ export default class PointOfSale extends Component {
             </Card.Group>
           </Grid.Column>
           <Grid.Column style={{ overflow: 'auto', height: '600px' }}>
-            <Grid 
-              id='shoppingCardGrid'
-              columns={4} >
-            {
-              this.state.shoppingCartItems.map(i =>
-                <Grid.Row key={i.id}>
-                  <Grid.Column verticalAlign='middle'>{i.product.name}</Grid.Column>
-                  <Grid.Column verticalAlign='middle'><Label>{i.count} @ ${(i.unit_amount / 100).toFixed(2)}</Label></Grid.Column>
-                  <Grid.Column verticalAlign='middle'><Label>${(i.unit_amount * i.count / 100).toFixed(2)}</Label></Grid.Column>
-                  <Grid.Column>
-                    <Button
-                      negative 
-                      content='Void'
-                      onClick={() => this.removeItem(i.id)}/>
-                  </Grid.Column>
-                </Grid.Row>)
-            }
-            </Grid>
+            <ShoppingCart />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -178,7 +156,10 @@ export default class PointOfSale extends Component {
         confirmButton='Void and Exit'
         open={this.state.confirmReturnHomeOpen}
         onCancel={this.closeConfirmReturnHome}
-        onConfirm={() => AppRouter.navigate(Routes.home)}
+        onConfirm={() => {
+          this.shoppingCartItems.clearAllItems();
+          AppRouter.navigate(Routes.home);
+        }}
         />
     </Container>;
 }
