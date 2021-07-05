@@ -1,7 +1,7 @@
 import { Component } from "react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import PriceRepository from "../data/priceRepository";
+import PriceRepository from "../data/PriceRepository";
 import { Container, Header, Form, Button, Label } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 

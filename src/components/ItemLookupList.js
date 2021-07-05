@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { Card } from "semantic-ui-react";
-import ProductRepository from "../services/productRepository";
+import ProductRepository from "../services/ProductRepository";
 import LookupItemCard from "./LookupItemCard";
 
 export default class ItemLookuplist extends Component {

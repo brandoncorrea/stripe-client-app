@@ -2,7 +2,7 @@ import { Component } from "react";
 import { Container, Header, Form, Button, Input, Dropdown, Label } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import PriceRepository from "../data/priceRepository";
+import PriceRepository from "../data/PriceRepository";
 import ErrorMessage from './ErrorMessage';
 
 export default class CreatePrice extends Component {

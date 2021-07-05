@@ -1,6 +1,6 @@
 import { Component } from "react";
 import EventEmitter from "../helpers/eventEmitter";
-import ShoppingCartRepository from "../data/shoppingCartRepository";
+import ShoppingCartRepository from "../data/ShoppingCartRepository";
 import ShoppingCartItem from './ShoppingCartItem';
 import { EventNames } from '../Config';
 import { List } from 'semantic-ui-react';

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import PriceRepository from "../data/priceRepository";
+import PriceRepository from "../data/PriceRepository";
 import { Button, Message, Card, Form } from 'semantic-ui-react';
 import PriceCard from './PriceCard';
 
