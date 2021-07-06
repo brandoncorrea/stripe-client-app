@@ -12,7 +12,7 @@ import Login from './components/Login';
 import UpdateProduct from "./components/UpdateProduct";
 import CreatePrice from "./components/CreatePrice";
 import UpdatePrice from "./components/UpdatePrice";
-import PointOfSale from "./components/PointOfSale";
+import ShoppingCart from "./components/ShoppingCart";
 import LookupMenu from "./components/LookupMenu";
 import GuardedRoute from "./components/GuardedRoute";
 
@@ -42,8 +42,8 @@ export default class AppRouter extends Component {
           />
         <GuardedRoute 
           permissionSet={1}
-          path={Routes.pointOfSale}
-          component={PointOfSale}
+          path={Routes.cart}
+          component={ShoppingCart}
           defaultComponent={Home}
           />
         <GuardedRoute

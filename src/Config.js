@@ -3,8 +3,7 @@ import * as appSettings from './appSettings.json';
 export const Routes = {
   home: '/',
 
-  /* Point of Sale Routes */
-  pointOfSale: '/pointOfSale',
+  cart: '/cart',
   lookup: '/lookup',
 
   /* Item Management Routes */
