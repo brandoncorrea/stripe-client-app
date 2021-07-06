@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { Button, List, Icon } from 'semantic-ui-react';
 import ShoppingCartRepository from "../data/ShoppingCartRepository";
-import ShoppingCart from "./ShoppingCartItemList";
 
 export default class ShoppingCartItem extends Component {
   shoppingCart = new ShoppingCartRepository();

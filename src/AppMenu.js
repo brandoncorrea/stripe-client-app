@@ -70,19 +70,18 @@ export default class AppMenu extends Component {
             <Icon name='sliders' />
             Item Management
           </Menu.Item>
-          <Menu.Item as='a'>
-            <GoogleLogout 
-              clientId={appSettings.Google.ClientID}
-              buttonText='Logout'
-              render={renderProps =>
-                <Icon 
-                  name='sign out' 
-                  onClick={renderProps.onClick} />
-              }
-              onLogoutSuccess={this.onLogoutSuccess}
-              />
-            Sign Out
-          </Menu.Item>
+          <GoogleLogout 
+            clientId={appSettings.Google.ClientID}
+            buttonText='Logout'
+            render={renderProps =>
+              <Menu.Item as='a'
+                onClick={renderProps.onClick}>
+                <Icon name='sign out' />
+                Sign Out
+              </Menu.Item>
+            }
+            onLogoutSuccess={this.onLogoutSuccess}
+            />
         </Sidebar>
 
         <Sidebar.Pusher 
