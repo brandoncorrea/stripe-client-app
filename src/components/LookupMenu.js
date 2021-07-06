@@ -59,7 +59,7 @@ export default class LookupMenu extends Component {
   render = () =>
     <Container>
       <Header as='h1' textAlign='center' content='Lookup' />
-      <Card.Group itemsPerRow={3} style={{ padding: '10px' }}>
+      <Card.Group itemsPerRow={2} style={{ padding: '10px' }}>
         {
           this.state.prices.map(i =>
             <LookupItemCard 

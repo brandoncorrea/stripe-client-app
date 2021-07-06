@@ -31,7 +31,7 @@ export default class AppMenu extends Component {
 
   render = () => 
     <div>
-        <Sidebar.Pushable as={Segment}>
+        <Sidebar.Pushable as={Segment} style={{ float: 'left', width: '100%' }}>
           <Icon
             name="bars" 
             size="big" 
