@@ -4,20 +4,27 @@ import { EventNames } from "../Config";
 import ShoppingCartRepository from '../data/ShoppingCartRepository';
 import ShoppingCart from "./ShoppingCartItemList";
 import EventEmitter from "../helpers/eventEmitter";
+import TransactionHandler from "../data/TransactionHandler";
 
 export default class PointOfSale extends Component {
   shoppingCartItems = new ShoppingCartRepository();
+  transactionHandler = new TransactionHandler();
 
   constructor(props) {
     super(props);
     this.state = {
-      items: this.shoppingCartItems.getItemArray(),
+      orderTotal: this.transactionHandler.getOrderTotal(),
+      itemCount: this.transactionHandler.getItemCount(),
       confirmVoidOrderOpen: false,
     };
 
     EventEmitter.subscribe(
       EventNames.shoppingCartItemsChanged,
-      items => this.setState({ items }));
+      () => this.setState({ 
+        orderTotal: this.transactionHandler.getOrderTotal(),
+        itemCount: this.transactionHandler.getItemCount()
+       })
+      );
 
     this.showConfirmVoidOrder = this.showConfirmVoidOrder.bind(this);
     this.closeConfirmVoidOrder = this.closeConfirmVoidOrder.bind(this);
@@ -37,12 +44,6 @@ export default class PointOfSale extends Component {
     this.closeConfirmVoidOrder();
   };
 
-  getOrderTotal = () => 
-    (this.state.items
-      .reduce((cur, price) => cur + price.unit_amount * price.count, 0) 
-      / 100)
-    .toFixed(2);
-    
   render = () =>
     <Container>
       <Header as="h1" textAlign="center" content="Shopping Cart" />
@@ -51,7 +52,7 @@ export default class PointOfSale extends Component {
         <Button positive content="Pay" />
         <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
       </Button.Group>
-      <Label>${this.getOrderTotal()}</Label>
+      <Label>{this.state.itemCount} items for ${this.state.orderTotal}</Label>
       <Confirm
         content='Are you sure you want to void the order?'
         cancelButton='Return to Order'

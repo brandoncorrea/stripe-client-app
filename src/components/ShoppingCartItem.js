@@ -1,8 +1,11 @@
 import { Component } from "react";
-import { Button, List } from 'semantic-ui-react';
+import { Button, List, Icon } from 'semantic-ui-react';
 import ShoppingCartRepository from "../data/ShoppingCartRepository";
+import ShoppingCart from "./ShoppingCartItemList";
 
 export default class ShoppingCartItem extends Component {
+  shoppingCart = new ShoppingCartRepository();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +15,11 @@ export default class ShoppingCartItem extends Component {
 
   // Voids this item from the Shopping Cart Repository
   voidItem = () =>
-    new ShoppingCartRepository().voidItem(this.state.price.id);
+    this.shoppingCart.voidItem(this.state.price.id);
+
+  // Adds an item to the shopping cart
+  addItem = () =>
+    this.shoppingCart.addItem(this.state.price);
 
   // 
   render = () => 
@@ -27,14 +34,17 @@ export default class ShoppingCartItem extends Component {
         <List.Item>
           <List.Content>${(this.state.price.unit_amount * this.state.price.count / 100).toFixed(2)}</List.Content>
         </List.Item>
-        <List.Item>
-          <List.Content>
-            <Button 
-              negative 
-              content='Void' 
-              onClick={this.voidItem} />
-          </List.Content>
-        </List.Item>
       </List>
+
+      <Button 
+        positive 
+        floated='right'
+        content={<Icon name='plus' />}
+        onClick={this.addItem} />
+      <Button
+        negative 
+        floated='right'
+        content={<Icon name='minus' />} 
+        onClick={this.voidItem} />
     </List.Item>
 }
