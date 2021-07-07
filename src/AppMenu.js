@@ -32,13 +32,6 @@ export default class AppMenu extends Component {
   render = () => 
     <div>
       <Sidebar.Pushable as={Segment}>
-
-    <Icon
-      name="bars" 
-      size="big" 
-      onClick={this.showMenu}
-      style={{ padding: '25px', cursor: 'pointer', position: 'absolute' }} 
-      />
         <Sidebar
           as={Menu}
           animation='overlay'
@@ -87,7 +80,13 @@ export default class AppMenu extends Component {
         <Sidebar.Pusher 
           style={{ width: '100%', zIndex: -1 }} 
           dimmed={this.state.visible}>
-          <Segment basic>
+          <Segment basic clearing>
+            <Icon
+              name="bars" 
+              size="big" 
+              onClick={this.showMenu}
+              style={{ cursor: 'pointer', float: 'left' }} 
+              />
             <AppRouter />
           </Segment>
         </Sidebar.Pusher>

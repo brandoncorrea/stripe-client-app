@@ -17,7 +17,7 @@ export default class Login extends Component {
   }
 
   render = () =>
-    <Container>
+    <Container style={{ padding: '10px' }}>
       <Header as='h1' textAlign='center'>Login</Header>
       <Button.Group fluid>
         <LoginButton onSuccess={this.state.onSuccess}/>
