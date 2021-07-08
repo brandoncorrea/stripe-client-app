@@ -3,10 +3,10 @@ import EventEmitter from "../helpers/eventEmitter";
 import ShoppingCartRepository from "../data/ShoppingCartRepository";
 import ShoppingCartItem from './ShoppingCartItem';
 import { EventNames } from '../Config';
-import { List } from 'semantic-ui-react';
+import { List, Table } from 'semantic-ui-react';
 import Guid from "../helpers/Guid";
 
-export default class ShoppingCart extends Component {
+export default class ShoppingCartItemList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,12 +19,14 @@ export default class ShoppingCart extends Component {
   }
 
   render = () =>
-    <List divided verticalAlign='middle'>
+  <Table unstackable>
+    <Table.Body>
       {
-        this.state.items.map(price => 
-          <List.Item key={Guid.newGuid()}>
-            <ShoppingCartItem price={price} />
-          </List.Item>)
+        this.state.items.map(price =>
+          <ShoppingCartItem 
+            key={Guid.newGuid()}
+            price={price} />)
       }
-    </List>
+    </Table.Body>
+  </Table>
 }

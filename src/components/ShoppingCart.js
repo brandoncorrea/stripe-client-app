@@ -47,12 +47,24 @@ export default class ShoppingCart extends Component {
   render = () =>
     <Container>
       <Header as="h1" textAlign="center" content="Shopping Cart" />
-      <ShoppingCartItemList />
-      <Button.Group>
-        <Button positive content="Pay" />
-        <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
+      {
+        // Display the current items or a message if no items exist
+        this.state.itemCount > 0
+        ? <ShoppingCartItemList />
+        : <Header as='h3' textAlign="center" content="Shopping Cart is Empty" />
+      }
+      <Button.Group fluid>
+        <Button content={`${this.state.itemCount} items for $${this.state.orderTotal}`} />
+        <Button
+          positive 
+          disabled={this.state.itemCount === 0}
+          content="Pay" />
+        <Button 
+          negative 
+          content="Void Order" 
+          disabled={this.state.itemCount === 0}
+          onClick={this.showConfirmVoidOrder} />
       </Button.Group>
-      <Label>{this.state.itemCount} items for ${this.state.orderTotal}</Label>
       <Confirm
         content='Are you sure you want to void the order?'
         cancelButton='Return to Order'
