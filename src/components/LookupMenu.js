@@ -81,12 +81,13 @@ export default class LookupMenu extends Component {
               onClick={() => this.addItem(Object.assign({}, i))} />)
         }
       </Card.Group>
-      <Label>{this.state.itemCount} items for ${this.state.orderTotal}</Label>
-      <Button.Group fluid widths='2'>
+      <Button.Group fluid>
         <Button 
           onClick={this.showPrevItemSet} 
           content="Previous" 
           disabled={!this.state.has_more_before} />
+        <Button 
+          content={`${this.state.itemCount} items for $${this.state.orderTotal}`}/>
         <Button 
           onClick={this.showNextItemSet} 
           content="Next"
