@@ -2,11 +2,11 @@ import { Component } from "react";
 import { Container, Header, Button, Confirm, Label } from "semantic-ui-react";
 import { EventNames } from "../Config";
 import ShoppingCartRepository from '../data/ShoppingCartRepository';
-import ShoppingCart from "./ShoppingCartItemList";
+import ShoppingCartItemList from "./ShoppingCartItemList";
 import EventEmitter from "../helpers/eventEmitter";
 import TransactionHandler from "../data/TransactionHandler";
 
-export default class PointOfSale extends Component {
+export default class ShoppingCart extends Component {
   shoppingCartItems = new ShoppingCartRepository();
   transactionHandler = new TransactionHandler();
 
@@ -47,7 +47,7 @@ export default class PointOfSale extends Component {
   render = () =>
     <Container>
       <Header as="h1" textAlign="center" content="Shopping Cart" />
-      <ShoppingCart />
+      <ShoppingCartItemList />
       <Button.Group>
         <Button positive content="Pay" />
         <Button negative content="Void Order" onClick={this.showConfirmVoidOrder} />
