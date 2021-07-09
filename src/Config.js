@@ -5,6 +5,7 @@ export const Routes = {
 
   cart: '/cart',
   lookup: '/lookup',
+  checkout: '/checkout',
 
   /* Item Management Routes */
   itemManagement: '/itemManagement',

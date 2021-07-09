@@ -15,6 +15,7 @@ import UpdatePrice from "./components/UpdatePrice";
 import ShoppingCart from "./components/ShoppingCart";
 import LookupMenu from "./components/LookupMenu";
 import GuardedRoute from "./components/GuardedRoute";
+import CheckoutMenu from "./components/CheckoutMenu";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -44,6 +45,12 @@ export default class AppRouter extends Component {
           permissionSet={1}
           path={Routes.cart}
           component={ShoppingCart}
+          defaultComponent={Home}
+          />
+        <GuardedRoute 
+          permissionSet={1}
+          path={Routes.checkout}
+          component={CheckoutMenu}
           defaultComponent={Home}
           />
         <GuardedRoute
