@@ -16,7 +16,8 @@ export default class CreateItem extends Component {
   getProductRequest() {
     var request = {
       name: document.getElementById('nameInput').value,
-      type: 'good'
+      type: 'good',
+      shippable: false
     };
     
     var description = document.getElementById('descriptionInput').value;
@@ -30,16 +31,16 @@ export default class CreateItem extends Component {
     this.setState({ message: 'Please enter a product name.' });
 
   createProductClicked = () => 
-  document.getElementById('nameInput').value.length === 0
-    ? this.showErrorMessage()
-    : ProductRepository
-      .create(this.getProductRequest())
-      .then(product =>{
-        if (product.error)
-          console.log(product);
-        else
-          AppRouter.navigate(Routes.updateProduct + '?productId=' + product.id)
-      });
+    document.getElementById('nameInput').value.length === 0
+      ? this.showErrorMessage()
+      : ProductRepository
+        .create(this.getProductRequest())
+        .then(product =>{
+          if (product.error)
+            console.log(product);
+          else
+            AppRouter.navigate(Routes.updateProduct + '?productId=' + product.id)
+        });
 
   render = () =>
     <Container>

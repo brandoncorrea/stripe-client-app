@@ -38,6 +38,7 @@ export default class UpdateProduct extends Component {
   getRequest = () => ({
     name: this.state.product.name,
     description: this.state.product.description,
+    shippable: false,
   });
 
   updateProductClicked = () =>
