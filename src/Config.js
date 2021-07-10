@@ -9,6 +9,7 @@ export const Routes = {
 
   manualCardTender: '/tender/manualCard',
   cashTender: '/tender/cash',
+  orderComplete: '/order/complete',
 
   /* Item Management Routes */
   itemManagement: '/itemManagement',
@@ -26,7 +27,8 @@ export const StripeApi = {
     'Authorization': 'Bearer ' + appSettings.Stripe.ApiKey
   },
   products: 'https://api.stripe.com/v1/products',
-  skus: 'https://api.stripe.com/v1/skus'
+  skus: 'https://api.stripe.com/v1/skus',
+  orders: 'https://api.stripe.com/v1/orders',
 }
 
 export const EventNames = {

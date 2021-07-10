@@ -1,4 +1,4 @@
-//import ShoppingCartRepository from "./ShoppingCartRepository";
+import ShoppingCartRepository from "./ShoppingCartRepository";
 import { StripeApi } from '../Config';
 
 export default class OrderRepository {
@@ -10,20 +10,20 @@ export default class OrderRepository {
     .then(res => res.json());
 
   getCreateUri() {
-    // var shoppingCart = new ShoppingCartRepository();
-    // var items = shoppingCart.getItemArray();
+    var shoppingCart = new ShoppingCartRepository();
+    var skus = shoppingCart.getItemArray();
     
-    // var baseUri = 'https://api.stripe.com/v1/orders?currency=usd'
+    var baseUri = `${StripeApi.orders}?currency=usd`
 
-    // // Add items to uri
-    // for (var i = 0; i < items.length; i++) {
-    //   baseUri += `&items[${i}][type]=sku`;
-    //   baseUri += `&items[${i}][parent]=${items[i].product.id}`;
-    //   baseUri += `&items[${i}][description]=${items[i].product.description.replace(' ', '%20')}`;
-    //   baseUri += `&items[${i}][quantity]=${items[i].count}`;
-    //   baseUri += `&items[${i}][amount]=${items[i].unit_amount}`;
-    // }
+    // Add items to uri
+    for (var i = 0; i < skus.length; i++) {
+      baseUri += `&items[${i}][type]=sku`;
+      baseUri += `&items[${i}][parent]=${skus[i].id}`;
+      baseUri += `&items[${i}][description]=${skus[i].product.description.replace(' ', '%20')}`;
+      baseUri += `&items[${i}][quantity]=${skus[i].count}`;
+      baseUri += `&items[${i}][amount]=${skus[i].price}`;
+    }
 
-    // return baseUri;
+    return baseUri;
   }
 }
