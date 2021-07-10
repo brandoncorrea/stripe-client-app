@@ -8,6 +8,7 @@ export const Routes = {
   checkout: '/checkout',
 
   manualCardTender: '/tender/manualCard',
+  cashTender: '/tender/cash',
 
   /* Item Management Routes */
   itemManagement: '/itemManagement',

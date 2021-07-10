@@ -8,10 +8,10 @@ export default class TransactionHandler {
       .reduce((cur, sku) => cur + sku.count, 0);
 
   getOrderTotal = () => 
-    (this.shoppingCart.getItemArray()
+    Number((this.shoppingCart.getItemArray()
       .reduce((cur, sku) => cur + sku.price * sku.count, 0) 
       / 100)
-    .toFixed(2);
+    .toFixed(2));
 
   setPaymentToken = token => 
     localStorage.setItem('paymentToken', token);

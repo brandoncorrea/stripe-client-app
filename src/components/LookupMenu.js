@@ -85,7 +85,7 @@ export default class LookupMenu extends Component {
           content="Previous" 
           disabled={!this.state.has_more_before} />
         <Button 
-          content={`${this.state.itemCount} items for $${this.state.orderTotal}`}/>
+          content={`${this.state.itemCount} items for $${this.state.orderTotal.toFixed(2)}`}/>
         <Button 
           onClick={this.showNextItemSet} 
           content="Next"

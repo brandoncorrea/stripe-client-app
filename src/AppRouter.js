@@ -16,6 +16,7 @@ import GuardedRoute from "./components/GuardedRoute";
 import CheckoutMenu from "./components/CheckoutMenu";
 import ManualCardTender from "./components/ManualCardTender";
 import CreateSku from "./components/CreateSku";
+import CashTender from "./components/CashTender";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -57,6 +58,12 @@ export default class AppRouter extends Component {
           permissionSet={1}
           path={Routes.manualCardTender}
           component={ManualCardTender}
+          defaultComponent={Home}
+          />
+        <GuardedRoute 
+          permissionSet={1}
+          path={Routes.cashTender}
+          component={CashTender}
           defaultComponent={Home}
           />
         <GuardedRoute

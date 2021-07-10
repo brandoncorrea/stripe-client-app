@@ -1,50 +1,29 @@
 import { Component } from "react";
-import { Statistic, Divider, Button, Header, Container } from "semantic-ui-react";
+import { Divider, Button, Header, Container } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
-import { EventNames, Routes } from "../Config";
+import { Routes } from "../Config";
 import TransactionHandler from "../data/TransactionHandler";
-import EventEmitter from "../helpers/eventEmitter";
+import OrderStatistics from "./OrderStatistics";
 
 export default class CheckoutMenu extends Component {
   transactionHandler = new TransactionHandler();
 
   constructor(props) {
     super(props);
-    this.state = {
-      orderTotal: this.transactionHandler.getOrderTotal(),
-      itemCount: this.transactionHandler.getItemCount()
-    }
-
-    EventEmitter.subscribe(
-      EventNames.shoppingCartItemsChanged,
-      () => this.setState({ 
-        orderTotal: this.transactionHandler.getOrderTotal(),
-        itemCount: this.transactionHandler.getItemCount()
-      }));
-
     this.tenderCash = this.tenderCash.bind(this);
     this.tenderManualCard = this.tenderManualCard.bind(this);
   }
 
-  tenderCash() {
+  tenderCash = () =>
+    AppRouter.navigate(Routes.cashTender);
 
-  }
-
-  tenderManualCard() {
+  tenderManualCard = () =>
     AppRouter.navigate(Routes.manualCardTender);
-  }
 
   render = () =>
     <Container>
       <Header as='h1' textAlign='center' content='Checkout' />
-      <Statistic size='small'>
-        <Statistic.Label>Items</Statistic.Label>
-        <Statistic.Value>{this.state.itemCount}</Statistic.Value>
-      </Statistic>
-      <Statistic size='small'>
-        <Statistic.Label>Order Total</Statistic.Label>
-        <Statistic.Value>${this.state.orderTotal}</Statistic.Value>
-      </Statistic>
+      <OrderStatistics />
       <Divider />
       <Button 
         fluid 
