@@ -2,12 +2,9 @@ import { Component } from "react";
 import { Divider, Button, Header, Container } from "semantic-ui-react";
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import TransactionHandler from "../data/TransactionHandler";
 import OrderStatistics from "./OrderStatistics";
 
 export default class CheckoutMenu extends Component {
-  transactionHandler = new TransactionHandler();
-
   constructor(props) {
     super(props);
     this.tenderCash = this.tenderCash.bind(this);
