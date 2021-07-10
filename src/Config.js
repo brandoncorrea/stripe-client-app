@@ -25,7 +25,6 @@ export const StripeApi = {
     'Authorization': 'Bearer ' + appSettings.Stripe.ApiKey
   },
   products: 'https://api.stripe.com/v1/products',
-  prices: 'https://api.stripe.com/v1/prices',
   skus: 'https://api.stripe.com/v1/skus'
 }
 
