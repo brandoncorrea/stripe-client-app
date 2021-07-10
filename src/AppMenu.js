@@ -4,14 +4,16 @@ import AppRouter from './AppRouter';
 import { Routes } from "./Config";
 import * as appSettings from './appSettings.json';
 import { GoogleLogout } from 'react-google-login';
-import { removeSessionCookie } from './services/session';
+import { removeSessionCookie, getUserPermission } from './services/session';
+import ConditionalMenuItem from './components/ConditionalMenuItem';
 
 export default class AppMenu extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      permissionSet: getUserPermission(),
     };
 
     this.setVisible = this.setVisible.bind(this);
@@ -48,21 +50,24 @@ export default class AppMenu extends Component {
             <Icon name='home' />
             Home
           </Menu.Item>
-          <Menu.Item as='a'
+          <ConditionalMenuItem as='a'
+            visible={this.state.permissionSet >= appSettings.PermissionSets.Staff}
             onClick={() => this.navigate(Routes.lookup)}>
             <Icon name='search' />
             Item Lookup
-          </Menu.Item>
-          <Menu.Item as='a'
+          </ConditionalMenuItem>
+          <ConditionalMenuItem as='a'
+            visible={this.state.permissionSet >= appSettings.PermissionSets.Staff}
             onClick={() => this.navigate(Routes.cart)}>
             <Icon name='shopping cart' />
             Cart
-          </Menu.Item>
-          <Menu.Item as='a'
+          </ConditionalMenuItem>
+          <ConditionalMenuItem as='a'
+            visible={this.state.permissionSet >= appSettings.PermissionSets.Supervisor}
             onClick={() => this.navigate(Routes.itemManagement)}>
             <Icon name='sliders' />
             Item Management
-          </Menu.Item>
+          </ConditionalMenuItem>
           <GoogleLogout 
             clientId={appSettings.Google.ClientID}
             buttonText='Logout'
