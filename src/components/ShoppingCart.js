@@ -47,7 +47,7 @@ export default class ShoppingCart extends Component {
     this.setState({ confirmVoidOrderOpen: false });
   
   voidOrder = () => {
-    this.shoppingCartItems.clearAllItems();
+    this.transactionHandler.void();
     this.closeConfirmVoidOrder();
   };
 

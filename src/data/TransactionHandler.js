@@ -13,9 +13,6 @@ export default class TransactionHandler {
       / 100)
     .toFixed(2));
 
-  setPaymentToken = token => 
-    localStorage.setItem('paymentToken', token);
-
-  getPaymentToken = () =>
-    localStorage.getItem('paymentToken');
+  void = () =>
+    this.shoppingCart.clearAllItems();
 }
