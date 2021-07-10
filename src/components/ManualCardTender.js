@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Container, Header, Form, Button, Message } from "semantic-ui-react";
+import { Container, Header, Form, Button, Message, Dimmer, Loader } from "semantic-ui-react";
 import TransactionHandler from "../data/TransactionHandler";
 import AppRouter from '../AppRouter';
 import { Routes } from "../Config";
@@ -23,6 +23,7 @@ export default class ManualCardTender extends Component {
       cvcError: false,
       cardNumberError: false,
       errorMessage: '',
+      showLoader: false,
     };
 
     this.cardNumberOnChange = this.cardNumberOnChange.bind(this);
@@ -100,6 +101,8 @@ export default class ManualCardTender extends Component {
 
   // Attempts to pay the order using the entered card information
   async submitPayment() {
+    this.setState({ showLoader: true });
+
     var expNums = this.joinString(this.getNumbers(this.state.expiresText));
 
     // Create the payment method
@@ -112,7 +115,10 @@ export default class ManualCardTender extends Component {
 
     // Validate the method
     if (method.error) {
-      this.setState({ errorMessage: method.error.message });
+      this.setState({ 
+        errorMessage: method.error.message,
+        showLoader: false
+      });
       return;
     }
 
@@ -121,7 +127,10 @@ export default class ManualCardTender extends Component {
 
     // Validate the intent
     if (intent.error) {
-      this.setState({ errorMessage: intent.error.message });
+      this.setState({ 
+        errorMessage: intent.error.message,
+        showLoader: false 
+      });
       return;
     }
 
@@ -130,7 +139,10 @@ export default class ManualCardTender extends Component {
       this.transactionHandler.void();
       AppRouter.navigate(`${Routes.orderComplete}?orderTotal=${intent.amount / 100}&tenderAmount=${intent.amount_received / 100}&itemCount=${this.transactionHandler.getItemCount()}`);
     } else
-      this.setState({ errorMessage: 'An error occurred.' });
+      this.setState({ 
+        errorMessage: 'An error occurred.' ,
+        showLoader: false
+      });
   }
 
   // Returns the prefix for the century (1990 => 19, 2021 => 20)
@@ -142,6 +154,11 @@ export default class ManualCardTender extends Component {
 
   render = () =>
     <Container>
+
+      <Dimmer active={this.state.showLoader}>
+        <Loader size='large'>Processing</Loader>
+      </Dimmer>
+
       <Header as='h1' textAlign='center' content='Manual Card' />
       <OrderStatistics />
       {
