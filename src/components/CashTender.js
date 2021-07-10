@@ -1,5 +1,7 @@
 import { Component } from "react";
 import { Container, Divider, Header, Input, Button, Form } from "semantic-ui-react";
+import AppRouter from "../AppRouter";
+import { Routes } from "../Config";
 import TransactionHandler from "../data/TransactionHandler";
 import OrderStatistics from './OrderStatistics';
 
@@ -11,7 +13,7 @@ export default class CashTender extends Component {
     super(props);
     this.state = {
       payDisabled: true,
-      amount: ''
+      amount: '',
     }
 
     this.onAmountChanged = this.onAmountChanged.bind(this);
@@ -66,6 +68,11 @@ export default class CashTender extends Component {
 
   payCash(event) {
     event.preventDefault();
+    var orderTotal = this.transactionHandler.getOrderTotal();
+    var itemCount = this.transactionHandler.getItemCount();
+    var tenderAmount = this.getTenderAmount();
+    AppRouter.navigate(`${Routes.orderComplete}?orderTotal=${orderTotal}&itemCount=${itemCount}&tenderAmount=${tenderAmount}`);
+    this.transactionHandler.void();
   }
 
   trimStart(text, char) {
@@ -73,6 +80,13 @@ export default class CashTender extends Component {
     while (text.length > index && text[index] === char) 
       index++;
     return text.substring(index);
+  }
+
+  getTenderAmount() {
+    var amount = this.state.amount;
+    if (amount.length > 0 && amount[0] === '$')
+      amount = amount.substring(1);
+    return Number(amount);
   }
 
   render = () =>
