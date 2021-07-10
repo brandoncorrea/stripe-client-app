@@ -29,6 +29,8 @@ export const StripeApi = {
   products: 'https://api.stripe.com/v1/products',
   skus: 'https://api.stripe.com/v1/skus',
   orders: 'https://api.stripe.com/v1/orders',
+  payment_intents: 'https://api.stripe.com/v1/payment_intents',
+  payment_methods: 'https://api.stripe.com/v1/payment_methods',
 }
 
 export const EventNames = {
