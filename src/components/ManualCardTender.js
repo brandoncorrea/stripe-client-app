@@ -1,14 +1,17 @@
 import { Component } from "react";
 import { Container, Header, Form, Button, Message } from "semantic-ui-react";
-import CardTokenRepository from "../data/CardTokenRepository";
-import OrderRepository from "../data/OrderRepository";
 import TransactionHandler from "../data/TransactionHandler";
+import AppRouter from '../AppRouter';
+import { Routes } from "../Config";
+import PaymentIntentRepository from "../data/PaymentIntentRepository";
+import PaymentMethodRepository from "../data/PaymentMethodRepository";
+import OrderStatistics from "./OrderStatistics";
 
 export default class ManualCardTender extends Component {
 
   transactionHandler = new TransactionHandler();
-  cardTokenRepo = new CardTokenRepository();
-  orderRepo = new OrderRepository();
+  intentRepo = new PaymentIntentRepository();
+  paymentMethodRepo = new PaymentMethodRepository();
 
   constructor(props) {
     super(props);
@@ -22,14 +25,13 @@ export default class ManualCardTender extends Component {
       errorMessage: '',
     };
 
-    this.orderRepo.create();
-
     this.cardNumberOnChange = this.cardNumberOnChange.bind(this);
     this.cvcOnChange = this.cvcOnChange.bind(this);
     this.expiresOnChange = this.expiresOnChange.bind(this);
     this.submitPayment = this.submitPayment.bind(this);
   }
 
+  // Autoformatting for the card number
   cardNumberOnChange(event, target) {
     var nums = this.getNumbers(target.value);
 
@@ -45,11 +47,13 @@ export default class ManualCardTender extends Component {
     this.setState({ cardNumberText: cardNumberText.substr(0, 19).trim() });
   }
 
+  // Autoformatting for the CVC
   cvcOnChange(event, target) {
     var cvcText = this.joinString(this.getNumbers(target.value)).substr(0, 3);
     this.setState({ cvcText });
   }
 
+  // Autoformatting for the expiration date
   expiresOnChange(event, target) {
     var expiresText = this.joinString(this.getNumbers(target.value));
     var month = expiresText.substr(0, 2);
@@ -74,18 +78,11 @@ export default class ManualCardTender extends Component {
     this.setState({ expiresText });
   }
 
-  joinString(chars) {
-    var str = '';
-    chars.forEach(c => str = `${str}${c}`);
-    return str;
-  }
+  // Converts a char array to a strings
+  joinString = chars => 
+    chars.reduce((prev, next) => prev + next, '');
 
-  getNumbers = value =>
-    this.toCharArray(value).filter(i => {
-      var num = Number(i);
-      return i !== ' ' && 0 <= num && num <= 9;
-    });
-
+  // Converts a string to an array of chars
   toCharArray(value) {
     var chars = [];
     for (var i = 0; i < value.length; i++)
@@ -93,92 +90,60 @@ export default class ManualCardTender extends Component {
     return chars;
   }
 
-  submitPayment() {
+  // Returns only the numeric values from a string
+  getNumbers = value =>
+    this.toCharArray(value).filter(i => {
+      var num = Number(i);
+      return i !== ' ' && 0 <= num && num <= 9;
+    });
 
-    var expiresError = this.getExpirationError();
-    var cvcError = this.getCvcError();
-    var cardNumberError = this.getCardNumberError();
 
-    if (expiresError || cvcError || cardNumberError){
-      this.setState ({
-        expiresError, 
-        cvcError, 
-        cardNumberError
-      });
+  // Attempts to pay the order using the entered card information
+  async submitPayment() {
+    var expNums = this.joinString(this.getNumbers(this.state.expiresText));
 
+    // Create the payment method
+    var method = await this.paymentMethodRepo.createCard(
+      Number(this.joinString(this.getNumbers(this.state.cardNumberText))),
+      Number(this.state.expiresText.substring(0, 2)),
+      Number(`${this.getYearPrefix()}${expNums.substr(2, 2)}`),
+      Number(this.state.cvcText)
+    );
+
+    // Validate the method
+    if (method.error) {
+      this.setState({ errorMessage: method.error.message });
       return;
     }
 
-    var cardNumber = Number(this.joinString(this.getNumbers(this.state.cardNumberText)));
-    var cvc = Number(this.state.cvcText);
-    var expNums = this.joinString(this.getNumbers(this.state.expiresText));
-    var expMonth = Number(this.state.expiresText.substring(0, 2));
-    var expYear = Number(`${this.getYearPrefix()}${expNums.substr(2, 2)}`);
+    // Create the intent
+    var intent = await this.intentRepo.pay(method.id, this.transactionHandler.getOrderTotal() * 100);
 
-    this.cardTokenRepo.create({
-      number: cardNumber,
-      exp_month: expMonth,
-      exp_year: expYear,
-      cvc: cvc
-    })
-    .then(data => {
-      if (data.error)
-        this.setState({ errorMessage: data.error.message });
-      else
-        this.transactionHandler.setPaymentToken(data.id);
-    });
+    // Validate the intent
+    if (intent.error) {
+      this.setState({ errorMessage: intent.error.message });
+      return;
+    }
+
+    // Final validation - Redirect if successful
+    if (intent.status === 'succeeded') {
+      this.transactionHandler.void();
+      AppRouter.navigate(`${Routes.orderComplete}?orderTotal=${intent.amount / 100}&tenderAmount=${intent.amount_received / 100}&itemCount=${this.transactionHandler.getItemCount()}`);
+    } else
+      this.setState({ errorMessage: 'An error occurred.' });
   }
 
+  // Returns the prefix for the century (1990 => 19, 2021 => 20)
   getYearPrefix = () => 
     new Date()
     .getFullYear()
     .toString()
     .substr(0, 2);
 
-  getCardNumberError() {
-    if (this.state.cardNumberText.length > 0)
-      return false;
-    return {
-      content: 'Please enter a card number.',
-      pointing: 'above'
-    };
-  }
-
-  getCvcError() {
-    if (this.state.cvcText.length === 3)
-      return false;
-    return {
-      content: 'Please enter a valid CVC code.',
-      pointing: 'above'
-    };
-  }
-
-  getExpirationError() {
-    var expNums = this.joinString(this.getNumbers(this.state.expiresText));
-    if (expNums.length !== 4)
-      return {
-        content: 'Please enter a valid date.',
-        pointing: 'above'
-      };
-    
-    var month = Number(expNums.substring(0, 2));
-    var year = Number(`${this.getYearPrefix()}${expNums.substr(2, 2)}`);
-    var today = new Date();
-    var exp = new Date(year, month, 0);
-
-    if (exp < today)
-      return {
-        content: 'Please enter a future date.',
-        pointing: 'above'
-      }
-
-    console.log('returning false')
-    return false;
-  }
-
   render = () =>
     <Container>
       <Header as='h1' textAlign='center' content='Manual Card' />
+      <OrderStatistics />
       {
         this.state.errorMessage.length > 0
         ? <Message error content={this.state.errorMessage} />
