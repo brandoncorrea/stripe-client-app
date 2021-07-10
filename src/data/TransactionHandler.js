@@ -5,11 +5,17 @@ export default class TransactionHandler {
 
   getItemCount = () =>
     this.shoppingCart.getItemArray()
-      .reduce((cur, price) => cur + price.count, 0);
+      .reduce((cur, sku) => cur + sku.count, 0);
 
   getOrderTotal = () => 
     (this.shoppingCart.getItemArray()
-      .reduce((cur, price) => cur + price.unit_amount * price.count, 0) 
+      .reduce((cur, sku) => cur + sku.price * sku.count, 0) 
       / 100)
     .toFixed(2);
+
+  setPaymentToken = token => 
+    localStorage.setItem('paymentToken', token);
+
+  getPaymentToken = () =>
+    localStorage.getItem('paymentToken');
 }

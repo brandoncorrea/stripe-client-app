@@ -6,27 +6,27 @@ export default class ShoppingCartRepository {
   storageName = "shoppingCart";
 
   // Adds an item to the repository
-  addItem(price) {
+  addItem(sku) {
     var items = this.getItemDictionary();
-    if (this.isPriceInOrder(price.id))
-      items[price.id].count++;
+    if (this.isSkuInOrder(sku.id))
+      items[sku.id].count++;
     else
-      items[price.id] = {
-        id: price.id,
-        unit_amount: price.unit_amount,
-        product: price.product,
+      items[sku.id] = {
+        id: sku.id,
+        price: sku.price,
+        product: sku.product,
         count: 1
       };
     this.setCurrentItems(items);
   }
 
   // Removes an item from the repository
-  voidItem(priceId) {
+  voidItem(skuId) {
     var items = this.getItemDictionary();
-    if (this.isPriceInOrder(priceId) && items[priceId].count > 1)
-      items[priceId].count--;
+    if (this.isSkuInOrder(skuId) && items[skuId].count > 1)
+      items[skuId].count--;
     else
-      delete items[priceId]
+      delete items[skuId]
     this.setCurrentItems(items);
   }
 
@@ -62,8 +62,8 @@ export default class ShoppingCartRepository {
     this.getItemArray().length === 0;
 
   // Returns true if the priceId is in the current order
-  isPriceInOrder(priceId) {
+  isSkuInOrder(sku) {
     var items = this.getItemDictionary();
-    return items[priceId] && items[priceId].count > 0;
+    return items[sku] && items[sku].count > 0;
   }
 }

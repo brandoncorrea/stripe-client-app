@@ -6,7 +6,7 @@ export default class LookupItemCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      price: props.price,
+      sku: props.sku,
       onClick: props.onClick
     };
   }
@@ -15,9 +15,9 @@ export default class LookupItemCard extends Component {
     <Card
       onClick={this.state.onClick} >
       <Card.Content>
-        <Card.Header content={this.state.price.product.name} />
-        <Card.Meta content={(this.state.price.unit_amount / 100).toFixed(2)} />
-        <Card.Description content={this.state.price.product.description} />
+        <Card.Header content={this.state.sku.product.name} />
+        <Card.Meta content={(this.state.sku.price / 100).toFixed(2)} />
+        <Card.Description content={this.state.sku.product.description} />
       </Card.Content>
     </Card>;
 }

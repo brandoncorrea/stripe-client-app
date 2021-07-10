@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Statistic, Divider, Button, Header, Container } from "semantic-ui-react";
-import { EventNames } from "../Config";
+import AppRouter from "../AppRouter";
+import { EventNames, Routes } from "../Config";
 import TransactionHandler from "../data/TransactionHandler";
 import EventEmitter from "../helpers/eventEmitter";
 
@@ -22,10 +23,15 @@ export default class CheckoutMenu extends Component {
       }));
 
     this.tenderCash = this.tenderCash.bind(this);
+    this.tenderManualCard = this.tenderManualCard.bind(this);
   }
 
   tenderCash() {
 
+  }
+
+  tenderManualCard() {
+    AppRouter.navigate(Routes.manualCardTender);
   }
 
   render = () =>
@@ -45,6 +51,12 @@ export default class CheckoutMenu extends Component {
         size='huge' 
         content='Cash' 
         onClick={this.tenderCash}
+        />
+      <Button 
+        fluid 
+        size='huge' 
+        content='Manual Card' 
+        onClick={this.tenderManualCard}
         />
     </Container>
 }

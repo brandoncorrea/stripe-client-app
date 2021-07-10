@@ -7,12 +7,13 @@ export const Routes = {
   lookup: '/lookup',
   checkout: '/checkout',
 
+  manualCardTender: '/tender/manualCard',
+
   /* Item Management Routes */
   itemManagement: '/itemManagement',
   createItem: '/createItem',
-  createPrice: '/createPrice',
+  createSku: '/createSku',
   updateProduct: '/updateProduct',
-  updatePrice: '/updatePrice',
   
   /* Auth Routes */
   login: '/login',
@@ -24,9 +25,11 @@ export const StripeApi = {
     'Authorization': 'Bearer ' + appSettings.Stripe.ApiKey
   },
   products: 'https://api.stripe.com/v1/products',
-  prices: 'https://api.stripe.com/v1/prices'
+  prices: 'https://api.stripe.com/v1/prices',
+  skus: 'https://api.stripe.com/v1/skus'
 }
 
 export const EventNames = {
-  shoppingCartItemsChanged: 'shoppingCartItemsChanged'
+  shoppingCartItemsChanged: 'shoppingCartItemsChanged',
+  skuDeleted: 'skuDeleted'
 }

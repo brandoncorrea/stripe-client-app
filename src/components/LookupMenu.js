@@ -1,31 +1,31 @@
 import { Component } from "react";
-import { Container, Card, Button, Header, Label } from 'semantic-ui-react';
+import { Container, Card, Button, Header } from 'semantic-ui-react';
 import LookupItemCard from './LookupItemCard';
-import PriceRepository from '../data/PriceRepository';
 import ShoppingCartRepository from '../data/ShoppingCartRepository';
 import TransactionHandler from "../data/TransactionHandler";
 import EventEmitter from "../helpers/eventEmitter";
 import { EventNames } from "../Config";
+import SkuRepository from "../data/SkuRepository";
 
 export default class LookupMenu extends Component {
   shoppingCartItems = new ShoppingCartRepository();
   transactionHandler = new TransactionHandler();
-
+  skuRepo = new SkuRepository();
 
   constructor(props) {
     super(props);
     this.state = {
-      prices: [],
+      skus: [],
       has_more_after: false,
       has_more_before: false,
       itemCount: this.transactionHandler.getItemCount(),
       orderTotal: this.transactionHandler.getOrderTotal()
     }
 
-    PriceRepository
+    this.skuRepo
       .getAll()
       .then(res => this.setState({ 
-        prices: res.data,
+        skus: res.data,
         has_more_after: res.has_more
       }));
 
@@ -41,43 +41,41 @@ export default class LookupMenu extends Component {
   }
   
   showPrevItemSet() {
-    if (this.state.prices.length < 1 || !this.state.has_more_before) 
+    if (this.state.skus.length < 1 || !this.state.has_more_before) 
       return;
 
-    PriceRepository
-    .getAllBefore(this.state.prices[0].id)
+    this.skuRepo.getAllBefore(this.state.skus[0].id)
     .then(res => this.setState({
-      prices: res.data,
+      skus: res.data,
       has_more_before: res.has_more,
       has_more_after: true
     }));
   }
 
   showNextItemSet() {
-    if (this.state.prices.length < 1 || !this.state.has_more_after)
+    if (this.state.skus.length < 1 || !this.state.has_more_after)
       return;
       
-    PriceRepository
-    .getAllAfter(this.state.prices[this.state.prices.length - 1].id)
-    .then(res => this.setState({
-      prices: res.data,
-      has_more_before: true,
-      has_more_after: res.has_more
-    }));
+    this.skuRepo.getAllAfter(this.state.skus[this.state.skus.length - 1].id)
+      .then(res => this.setState({
+        skus: res.data,
+        has_more_before: true,
+        has_more_after: res.has_more
+      }));
   }
   
-  addItem = price =>
-    this.shoppingCartItems.addItem(price);
+  addItem = sku =>
+    this.shoppingCartItems.addItem(sku);
 
   render = () =>
     <Container>
       <Header as='h1' textAlign='center' content='Lookup' />
       <Card.Group itemsPerRow={2} style={{ padding: '10px' }}>
         {
-          this.state.prices.map(i =>
+          this.state.skus.map(i =>
             <LookupItemCard 
               key={i.id}
-              price={i}
+              sku={i}
               onClick={() => this.addItem(Object.assign({}, i))} />)
         }
       </Card.Group>

@@ -1,8 +1,8 @@
 import { Component } from "react";
-import { Card } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 import AppRouter from "../AppRouter";
 import { Routes } from "../Config";
-import PriceRepository from "../data/PriceRepository";
+import ProductRepository from "../data/ProductRepository";
 import ConditionalIcon from "./ConditionalIcon";
 
 export default class ProductCard extends Component {
@@ -11,33 +11,21 @@ export default class ProductCard extends Component {
     this.state = {
       editing: false,
       product: props.product,
-      price: {
-        unit_amount: 0
-      },
     }
 
-    PriceRepository
-      .getActive(this.state.product.id)
-      .then(prices => {
-        if (prices.length > 0)
-          this.setState({ price: prices[0] });
-        this.forceUpdate();
-      });
+    this.deleteProduct = this.deleteProduct.bind(this);
   }
-
-  getCardColor = () =>
-    this.state.product.active
-      ? 'green' 
-      : 'red';
 
   navigateToUpdateProduct = () =>
     AppRouter.navigate(Routes.updateProduct + '?productId=' + this.state.product.id);
 
+  deleteProduct = () =>
+    ProductRepository
+      .delete(this.state.product.id)
+      .then(res => console.log(res));
+
   render = () =>
-    <Card 
-      fluid 
-      color={this.getCardColor()}
-      onClick={this.navigateToUpdateProduct}>
+    <Card fluid>
       <Card.Content>
         <Card.Header content={this.state.product.name} />
         <Card.Meta>
@@ -55,6 +43,16 @@ export default class ProductCard extends Component {
             />
         </Card.Meta>
         <Card.Description content={this.state.product.description} />
+      </Card.Content>
+      <Card.Content extra>
+        <Button.Group fluid>
+          <Button basic positive
+            content='Update'
+            onClick={this.navigateToUpdateProduct} />
+          <Button basic negative 
+            content='Delete'
+            onClick={this.deleteProduct} />
+        </Button.Group>
       </Card.Content>
     </Card>;
 }

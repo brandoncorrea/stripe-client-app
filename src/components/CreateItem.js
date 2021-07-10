@@ -6,23 +6,25 @@ import { Form, Button, Container, Header } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 
 export default class CreateItem extends Component {
-
-  state = {
-    message: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: ''
+    }
   }
 
-  getProductRequest = () => ({
-    name: document.getElementById('nameInput').value,
-    description: document.getElementById('descriptionInput').value,
-    active: document.getElementById('activeCheckbox').checked,
-    metadata: {
-      "cafe": document.getElementById('cafeCheckbox').checked,
-      "web": document.getElementById('webCheckbox').checked,
-      "resource": document.getElementById('resourceCheckbox').checked,
-    },
-    unit_label: document.getElementById('unitLabelInput').value,
-    statement_descriptor: document.getElementById('statementDescriptorInput').value
-  });
+  getProductRequest() {
+    var request = {
+      name: document.getElementById('nameInput').value,
+      type: 'good'
+    };
+    
+    var description = document.getElementById('descriptionInput').value;
+    if (description)
+      request.description = description;
+    
+    return request
+  };
 
   showErrorMessage = () =>
     this.setState({ message: 'Please enter a product name.' });
@@ -32,8 +34,12 @@ export default class CreateItem extends Component {
     ? this.showErrorMessage()
     : ProductRepository
       .create(this.getProductRequest())
-      .then(product =>
-        AppRouter.navigate(Routes.updateProduct + '?productId=' + product.id));
+      .then(product =>{
+        if (product.error)
+          console.log(product);
+        else
+          AppRouter.navigate(Routes.updateProduct + '?productId=' + product.id)
+      });
 
   render = () =>
     <Container>
@@ -57,46 +63,7 @@ export default class CreateItem extends Component {
             type="text" 
             maxLength="250" />
         </Form.Field>
-        
-        <Form.Field>
-          <label>Statement Descriptor: </label>
-          <input 
-            id="statementDescriptorInput" 
-            placeholder="Statement Descriptor"
-            type="text" />
-        </Form.Field>
-        
-        <Form.Field>
-          <label>Unit Label: </label>
-          <input 
-            id="unitLabelInput" 
-            placeholder="Unit Label"
-            type="text"  />
-        </Form.Field>
 
-        <Form.Group inline>
-          <label>Available At: </label>
-          <Form.Checkbox 
-            label="Online Shop"
-            id="webCheckbox"
-            />
-          <Form.Checkbox 
-            label="Caf&eacute;"
-            id="cafeCheckbox"
-            />
-          <Form.Checkbox 
-            label="Resource Center"
-            id="resourceCheckbox"
-            />
-        </Form.Group>
-        <Form.Field>
-          <Form.Checkbox
-            toggle
-            label="Active"
-            id="activeCheckbox"
-            defaultChecked={true}
-            />
-        </Form.Field>
         <Button.Group fluid widths="2">
           <Button onClick={() => AppRouter.navigate(Routes.itemManagement)}>Cancel</Button>
           <Button positive onClick={this.createProductClicked}>Save</Button>

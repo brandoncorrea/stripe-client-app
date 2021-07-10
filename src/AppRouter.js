@@ -10,12 +10,12 @@ import CreateItem from './components/CreateItem';
 import Home from './components/Home';
 import Login from './components/Login';
 import UpdateProduct from "./components/UpdateProduct";
-import CreatePrice from "./components/CreatePrice";
-import UpdatePrice from "./components/UpdatePrice";
 import ShoppingCart from "./components/ShoppingCart";
 import LookupMenu from "./components/LookupMenu";
 import GuardedRoute from "./components/GuardedRoute";
 import CheckoutMenu from "./components/CheckoutMenu";
+import ManualCardTender from "./components/ManualCardTender";
+import CreateSku from "./components/CreateSku";
 
 export default class AppRouter extends Component {
   static navigate = path =>
@@ -53,6 +53,12 @@ export default class AppRouter extends Component {
           component={CheckoutMenu}
           defaultComponent={Home}
           />
+        <GuardedRoute 
+          permissionSet={1}
+          path={Routes.manualCardTender}
+          component={ManualCardTender}
+          defaultComponent={Home}
+          />
         <GuardedRoute
           permissionSet={1} 
           path={Routes.lookup}
@@ -67,20 +73,14 @@ export default class AppRouter extends Component {
           />
         <GuardedRoute
           permissionSet={2} 
-          path={Routes.createPrice}
-          component={CreatePrice}
+          path={Routes.createSku}
+          component={CreateSku}
           defaultComponent={Home}
           />
         <GuardedRoute
           permissionSet={2} 
           path={Routes.updateProduct}
           component={UpdateProduct}
-          defaultComponent={Home}
-          />
-        <GuardedRoute
-          permissionSet={2} 
-          path={Routes.updatePrice}
-          component={UpdatePrice}
           defaultComponent={Home}
           />
       </Switch>

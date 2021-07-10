@@ -45,4 +45,11 @@ export default class ProductRepository {
 
     static deactivate = productId =>
       ProductRepository.update(productId, { active: false });
+
+    static delete = productId =>
+      fetch(StripeApi.products + '/' + productId, {
+        method: 'DELETE',
+        headers: StripeApi.headers
+      })
+      .then(res => res.json());
 }
