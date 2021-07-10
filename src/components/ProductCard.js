@@ -1,9 +1,9 @@
 import { Component } from "react";
 import { Card, Button } from 'semantic-ui-react';
 import AppRouter from "../AppRouter";
-import { Routes } from "../Config";
+import { EventNames, Routes } from "../Config";
 import ProductRepository from "../data/ProductRepository";
-import ConditionalIcon from "./ConditionalIcon";
+import EventEmitter from "../helpers/eventEmitter";
 
 export default class ProductCard extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ export default class ProductCard extends Component {
     this.state = {
       editing: false,
       product: props.product,
+      errorMessage: ''
     }
 
     this.deleteProduct = this.deleteProduct.bind(this);
@@ -22,27 +23,22 @@ export default class ProductCard extends Component {
   deleteProduct = () =>
     ProductRepository
       .delete(this.state.product.id)
-      .then(res => console.log(res));
+      .then(res => {
+        if (res.error)
+          EventEmitter.dispatch(EventNames.productDeletedError, {
+            error: res.error,
+            product: this.state.product.id
+          });
+        else
+          EventEmitter.dispatch(EventNames.productDeleted, this.state.product.id);
+      });
 
   render = () =>
     <Card fluid>
       <Card.Content>
         <Card.Header content={this.state.product.name} />
-        <Card.Meta>
-          <ConditionalIcon 
-            condition={this.state.product.metadata.cafe}
-            name="coffee"
-            />
-          <ConditionalIcon 
-            condition={this.state.product.metadata.resource}
-            name="registered"
-            />
-          <ConditionalIcon 
-            condition={this.state.product.metadata.web}
-            name="globe"
-            />
-        </Card.Meta>
         <Card.Description content={this.state.product.description} />
+        <Card.Meta>{this.state.errorMessage}</Card.Meta>
       </Card.Content>
       <Card.Content extra>
         <Button.Group fluid>

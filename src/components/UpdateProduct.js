@@ -2,9 +2,10 @@ import { Component } from "react";
 import { Container, Header, Form, Button } from 'semantic-ui-react';
 import ErrorMessage from './ErrorMessage';
 import AppRouter from '../AppRouter';
-import { Routes } from "../Config";
+import { EventNames, Routes } from "../Config";
 import ProductRepository from "../data/ProductRepository";
 import SkuList from "./SkuList";
+import EventEmitter from "../helpers/eventEmitter";
 
 export default class UpdateProduct extends Component {
   
@@ -14,6 +15,7 @@ export default class UpdateProduct extends Component {
       message: '',
       showSkus: false,
       product: {
+        id: AppRouter.getSearchParam('productId'),
         name: '',
         description: '',
         statement_descriptor: '',
@@ -22,12 +24,27 @@ export default class UpdateProduct extends Component {
     };
 
     ProductRepository
-      .getById(AppRouter.getSearchParam('productId'))
+      .getById(this.state.product.id)
       .then(product => {
         if (product.error)
           AppRouter.navigate(Routes.itemManagement);
         else
           this.setState({ product })
+      });
+    
+    // Configure events
+    EventEmitter.subscribe(
+      EventNames.skuDeletedError,
+      event => {
+        if (this.state.product.id === event.product)
+          this.setState({ message: event.error.message });
+      });
+    
+    EventEmitter.subscribe(
+      EventNames.skuDeleted,
+      event => {
+        if (this.state.product.id === event.product)
+          this.setState({ message: '' });
       });
 
     this.onNameChange = this.onNameChange.bind(this);

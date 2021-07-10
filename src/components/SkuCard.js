@@ -9,6 +9,7 @@ export default class SkuCard extends Component {
     super(props);
     this.state = {
       sku: props.sku,
+      errorMessage: '',
     }
 
     this.getFormattedPrice = this.getFormattedPrice.bind(this);
@@ -23,13 +24,21 @@ export default class SkuCard extends Component {
   deleteSku = () =>
     new SkuRepository()
     .delete(this.state.sku.id)
-    .then(res => EventEmitter.dispatch(
-      EventNames.skuDeleted,
-      {
-        product: this.state.sku.product.id,
-        sku: this.state.sku.id
-      }
-    ));
+    .then(res => {
+      if (res.error)
+        EventEmitter.dispatch(
+          EventNames.skuDeletedError, {
+            error: res.error,
+            product: this.state.sku.product.id,
+            sku: this.state.sku.id
+          });
+      else
+        EventEmitter.dispatch(
+          EventNames.skuDeleted, {
+            product: this.state.sku.product.id,
+            sku: this.state.sku.id
+          });
+    });
 
   render = () =>
     <Card>

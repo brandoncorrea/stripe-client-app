@@ -35,5 +35,8 @@ export const StripeApi = {
 
 export const EventNames = {
   shoppingCartItemsChanged: 'shoppingCartItemsChanged',
-  skuDeleted: 'skuDeleted'
+  skuDeleted: 'skuDeleted',
+  productDeleted: 'productDeleted',
+  skuDeletedError: 'skuDeletedError',
+  productDeletedError: 'productDeletedError',
 }

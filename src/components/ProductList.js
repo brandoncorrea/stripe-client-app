@@ -1,14 +1,25 @@
 import { Component } from "react";
 import { Card, Button, Message, Form } from 'semantic-ui-react';
+import { EventNames } from "../Config";
 import ProductRepository from "../data/ProductRepository";
+import EventEmitter from "../helpers/eventEmitter";
 import ProductCard from "./ProductCard";
 
 export default class ProductList extends Component {
 
-  state = {
-    products: [],
-    has_more: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: [],
+      has_more: false,
+    };
+
+    EventEmitter.subscribe(
+      EventNames.productDeleted,
+      product => this.setState({
+        products: this.state.products.filter(i => i.id !== product)
+      }));
+  }
   
   componentDidMount = () =>
     ProductRepository
@@ -25,8 +36,8 @@ export default class ProductList extends Component {
       {
         this.state.products.map(i =>
           <ProductCard 
-          key={i.id}
-          product={i} />)
+            key={i.id}
+            product={i} />)
         }
     </Card.Group>
 
