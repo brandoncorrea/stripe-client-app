@@ -1,7 +1,5 @@
 import { Component } from "react";
 import { Statistic } from 'semantic-ui-react';
-import EventEmitter from '../helpers/eventEmitter';
-import { EventNames } from '../Config';
 import TransactionHandler from '../data/TransactionHandler';
 
 export default class OrderStatistics extends Component {
@@ -13,13 +11,6 @@ export default class OrderStatistics extends Component {
       orderTotal: this.transactionHandler.getOrderTotal(),
       itemCount: this.transactionHandler.getItemCount()
     }
-
-    EventEmitter.subscribe(
-      EventNames.shoppingCartItemsChanged,
-      () => this.setState({ 
-        orderTotal: this.transactionHandler.getOrderTotal(),
-        itemCount: this.transactionHandler.getItemCount()
-      }));
   }
 
   render = () =>
