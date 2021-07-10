@@ -18,6 +18,10 @@ export default class CashTender extends Component {
 
     this.onAmountChanged = this.onAmountChanged.bind(this);
     this.payCash = this.payCash.bind(this);
+
+    var orderTotal = this.transactionHandler.getOrderTotal();
+    if (orderTotal <= 0)
+      this.payCash();
   }
 
   // Returns true if the entered amount is greater than or equal to the order total
@@ -66,8 +70,7 @@ export default class CashTender extends Component {
       });
   }
 
-  payCash(event) {
-    event.preventDefault();
+  payCash() {
     var orderTotal = this.transactionHandler.getOrderTotal();
     var itemCount = this.transactionHandler.getItemCount();
     var tenderAmount = this.getTenderAmount();
